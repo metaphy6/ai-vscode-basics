@@ -1,10 +1,12 @@
 {
   "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
-  "$comment": "VS Code Copilot MCP config. Mirror of repo-root .mcp.json so VS Code-only setups still see the servers.",
+  "$comment": "VS Code Copilot MCP config. VS Code merges this file with ~/.config/Code/User/mcp.json. For same-named servers the workspace entry takes precedence, so this entry is compatible with a global codegraph install — no duplication. See docs/guides/MCP_SETUP.md.",
   "servers": {
     "codegraph": {
+      "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@colbymchenry/codegraph"]
+      "args": ["-y", "@colbymchenry/codegraph", "serve", "--mcp", "--path", "${workspaceFolder}"]
     }
-  }
+  },
+  "inputs": []
 }

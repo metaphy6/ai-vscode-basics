@@ -3,3 +3,5 @@ ts_utc,run_id,agent,scope,action,status,summary,refs,commit_sha
 2026-06-02T16:54:16Z,run-test-002,human,general,commit,completed,feat(x): add thing,,pending
 2026-06-02T16:54:16Z,run-20260602165416-573434,human,general,note,completed,no csv,,
 2026-06-02T16:54:16Z,run-test-003,human,general,note,completed,"one, two, three",,
+2026-06-02T17:36:10Z,run-20260602173610-645182,copilot,mcp,commit,completed,fix(mcp): remove hardcoded codegraph from MCP configs; add codegraph install prompt in scaffold.sh,,pending
+2026-06-02T17:41:14Z,run-20260602174114-651655,copilot,mcp,commit,completed,fix(mcp): restore codegraph with correct serve --mcp args; workspace entry coexists with global install,,pending

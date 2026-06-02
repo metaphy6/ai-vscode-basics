@@ -1,12 +1,12 @@
 {
   "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
-  "$comment": "Repo-level MCP server configuration. Read by Claude Code, Cursor, and other MCP-aware clients. Mirrored to .vscode/mcp.json for VS Code Copilot, and to .cursor/mcp.json for Cursor.",
+  "$comment": "Repo-level MCP server configuration. Read by Claude Code, Cursor, and other MCP-aware clients. Mirrored to .vscode/mcp.json for VS Code Copilot and to .cursor/mcp.json for Cursor.",
   "mcpServers": {
     "codegraph": {
-      "$comment": "CodeGraph — symbol lookup, callers/callees, route mapping. Treat as discovery (not edit). Run any 'make codegraph.reindex' equivalent after large refactors. See .agents/skills/mcp-usage/SKILL.md.",
+      "$comment": "CodeGraph — semantic code intelligence: symbol lookup, callers/callees, route mapping. Requires 'codegraph init -i' inside the project to build the index. If you have codegraph installed globally via 'codegraph install --location=global', this workspace entry takes precedence and they do not conflict (same args). See docs/guides/MCP_SETUP.md.",
+      "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@colbymchenry/codegraph"],
-      "env": {}
+      "args": ["-y", "@colbymchenry/codegraph", "serve", "--mcp"]
     }
   }
 }
