@@ -1,0 +1,12 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
+  "$comment": "Repo-level MCP server configuration. Read by Claude Code, Cursor, and other MCP-aware clients. Mirrored to .vscode/mcp.json for VS Code Copilot, and to .cursor/mcp.json for Cursor.",
+  "mcpServers": {
+    "codegraph": {
+      "$comment": "CodeGraph — symbol lookup, callers/callees, route mapping. Treat as discovery (not edit). Run any 'make codegraph.reindex' equivalent after large refactors. See .agents/skills/mcp-usage/SKILL.md.",
+      "command": "npx",
+      "args": ["-y", "@colbymchenry/codegraph"],
+      "env": {}
+    }
+  }
+}

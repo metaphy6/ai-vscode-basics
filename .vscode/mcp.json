@@ -1,0 +1,10 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
+  "$comment": "VS Code Copilot MCP config. Mirror of repo-root .mcp.json so VS Code-only setups still see the servers.",
+  "servers": {
+    "codegraph": {
+      "command": "npx",
+      "args": ["-y", "@colbymchenry/codegraph"]
+    }
+  }
+}

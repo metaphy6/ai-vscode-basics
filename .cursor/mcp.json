@@ -1,0 +1,11 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/cursor-mcp.json",
+  "$comment": "Cursor MCP config. Mirrors .mcp.json at repo root for cross-tool consistency. Uncomment servers you actually want to use.",
+  "mcpServers": {
+    "codegraph": {
+      "command": "npx",
+      "args": ["-y", "@colbymchenry/codegraph"],
+      "env": {}
+    }
+  }
+}
