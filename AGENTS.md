@@ -223,7 +223,7 @@ When in genuine doubt, prefer one short clarifying question over a wrong
 implementation. Genuine doubt means: the user's intent is ambiguous *and* a
 wrong choice would be expensive to undo. "Should I keep going?" is not
 clarification — see the [`phase-persistence`](.agents/skills/phase-persistence/SKILL.md)
-skill.
+skill and [`ROADMAP_DISCIPLINE.md`](.agents/instructions/ROADMAP_DISCIPLINE.md).
 
 ---
 
@@ -271,6 +271,7 @@ Especially load before the matching work:
 - [`phase-persistence`](.agents/skills/phase-persistence/SKILL.md) — when implementing a multi-bullet phase.
 - [`non-zero-exit-recovery`](.agents/skills/non-zero-exit-recovery/SKILL.md) — on any command failure.
 - [`parallel-subagents`](.agents/skills/parallel-subagents/SKILL.md) — when fanning out reads / searches.
+- **ROADMAP discipline**: read [`.agents/instructions/ROADMAP_DISCIPLINE.md`](.agents/instructions/ROADMAP_DISCIPLINE.md) — tick boxes immediately as each deliverable completes; do not leave incomplete sub-phases unchecked.
 
 ---
 

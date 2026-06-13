@@ -19,9 +19,10 @@ this repository. The authoritative cross-cutting rulebook is
 | Claude / Gemini / Aider entry points | [`CLAUDE.md`](../CLAUDE.md), [`GEMINI.md`](../GEMINI.md), [`CONVENTIONS.md`](../CONVENTIONS.md) |
 | Copilot chat modes | [`.github/chatmodes/`](chatmodes) |
 | Copilot slash-command prompts | [`.github/prompts/`](prompts) |
-| Project plan | [`docs/planning/ROADMAP.md`](../docs/planning/ROADMAP.md) |
+| **Project plan** | **[`docs/planning/ROADMAP.md`](../docs/planning/ROADMAP.md)** — tick boxes as you complete deliverables per [ROADMAP_DISCIPLINE.md](../.agents/instructions/ROADMAP_DISCIPLINE.md) |
 | Tracking model | [`ai/tracking.schema.md`](../ai/tracking.schema.md), [`docs/tracking/README.md`](../docs/tracking/README.md) |
 | Curated skills | [`.agents/skills/README.md`](../.agents/skills/README.md) |
+| **Agent instructions** | [`.agents/instructions/ROADMAP_DISCIPLINE.md`](../.agents/instructions/ROADMAP_DISCIPLINE.md) — **mandatory box-ticking discipline for every phase** |
 | Agent ops scripts | [`xops/README.md`](../xops/README.md) |
 | MCP servers | [`.mcp.json`](../.mcp.json), [`.vscode/mcp.json`](../.vscode/mcp.json) |
 
@@ -41,6 +42,9 @@ never shadow it with a new file at a different path.
    diagnose, fix, resume. Never retry blindly.
 5. **Session recovery**: run [`xops/agent/session-bootstrap.sh`](../xops/agent/session-bootstrap.sh)
    at session start; surface any unresolved `last_failure.json`.
+6. **ROADMAP discipline**: Every time you complete a deliverable in [`docs/planning/ROADMAP.md`](../docs/planning/ROADMAP.md),
+   immediately tick its checkbox `[x]` using `multi_replace_string_in_file`. Do not leave
+   incomplete sub-phases unchecked. See [`.agents/instructions/ROADMAP_DISCIPLINE.md`](../.agents/instructions/ROADMAP_DISCIPLINE.md).
 
 ## 🧠 Load skills on demand
 
