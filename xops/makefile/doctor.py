@@ -44,7 +44,6 @@ CHECKS_REQUIRED = [
 ]
 
 EXECUTABLE = [
-    "xops/init/scaffold.sh",
     "xops/agent/tracking_append.sh",
     "xops/agent/safe-run.sh",
     "xops/agent/session-bootstrap.sh",
