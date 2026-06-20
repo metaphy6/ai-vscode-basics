@@ -6,7 +6,7 @@
       "$comment": "CodeGraph — semantic code intelligence: symbol lookup, callers/callees, route mapping. Requires 'codegraph init -i' inside the project to build the index. If you have codegraph installed globally via 'codegraph install --location=global', this workspace entry takes precedence and they do not conflict (same args). See docs/guides/MCP_SETUP.md.",
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@colbymchenry/codegraph", "serve", "--mcp"]
+      "args": ["-y", "@colbymchenry/codegraph", "serve", "--mcp", "--path", "${workspaceFolder}"]
     }
   }
 }
