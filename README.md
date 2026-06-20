@@ -22,7 +22,7 @@ curl -fsSL https://raw.githubusercontent.com/metaphy6/ai-vscode-basics/main/inst
 ```
 
 ```bash
-# 2. Or clone + scaffold manually
+# 2. Or clone + scaffold manually (scaffold.sh lives in the framework repo)
 git clone https://github.com/metaphy6/ai-vscode-basics.git ~/code/ai-vscode-basics
 ~/code/ai-vscode-basics/xops/init/scaffold.sh --target ./my-repo
 ```
@@ -135,7 +135,7 @@ The agent in your project reads `AGENTS.md` first. That's it.
 | `ai/tracking.csv` + `ai/tracking.schema.md` | The 9-column tracking log (blank on fresh install). |
 | `ai/state/` | Session state (checkpoint, last_failure, log.jsonl). |
 | `ai/context.md` | Shared context pack — single file for project-specific overrides. |
-| `xops/init/` | The scaffolder itself (`scaffold.sh`). |
+| `xops/init/` | The scaffolder itself — lives in the framework repo, **not copied to targets** by `install.sh`. |
 | `xops/agent/` | `safe-run.sh`, `session-bootstrap.sh`, `tracking_append.sh`, `run-with-retry.sh`. |
 | `xops/makefile/` | Python (stdlib only) ops scripts that `make` dispatches to. |
 | `docs/` | Documentation templates (code/, project/, design/, planning/, tracking/, guides/). |

@@ -3,7 +3,7 @@
   "$comment": "Repo-level MCP server configuration. Read by Claude Code, Cursor, and other MCP-aware clients. Mirrored to .vscode/mcp.json for VS Code Copilot and to .cursor/mcp.json for Cursor.",
   "mcpServers": {
     "codegraph": {
-      "$comment": "CodeGraph — semantic code intelligence: symbol lookup, callers/callees, route mapping. The server discovers the project via CWD (Claude Code and other clients launch MCP servers from the project root). VS Code Copilot uses .vscode/mcp.json instead, which expands ${workspaceFolder}. Requires 'codegraph init' inside the project to build the index (scaffold.sh runs this automatically). See docs/guides/MCP_SETUP.md.",
+      "$comment": "CodeGraph — semantic code intelligence: symbol lookup, callers/callees, route mapping. scaffold.sh writes a project-specific copy of this file with --path baked in to the absolute project path, so every MCP client works correctly. VS Code Copilot uses .vscode/mcp.json (which keeps ${workspaceFolder}). See docs/guides/MCP_SETUP.md.",
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "@colbymchenry/codegraph", "serve", "--mcp"]

@@ -25,13 +25,21 @@ included in the repo MCP configs with the correct invocation:
 "codegraph": {
   "type": "stdio",
   "command": "npx",
-  "args": ["-y", "@colbymchenry/codegraph", "serve", "--mcp", "--path", "${workspaceFolder}"]
+  "args": ["-y", "@colbymchenry/codegraph", "serve", "--mcp", "--path", "/absolute/path/to/project"]
 }
 ```
 
-**The `serve --mcp` subcommand is mandatory.** Omitting it causes `npx` to launch
-the interactive installer instead of the server — the server appears broken and
-never connects.
+**Two config files, two strategies:**
+
+| File | Used by | Path strategy |
+|---|---|---|
+| `.vscode/mcp.json` | VS Code Copilot | `${workspaceFolder}` — VS Code expands it at runtime |
+| `.mcp.json` | Claude Code, generic clients | Absolute path baked in by `scaffold.sh` |
+| `.cursor/mcp.json` | Cursor | `${workspaceFolder}` — Cursor expands it |
+
+`scaffold.sh` generates a project-specific `.mcp.json` with the absolute target
+path embedded. **Never copy `.mcp.json` from this framework repo into a project
+by hand** — run `scaffold.sh` so the path gets substituted correctly.
 
 ### Works alongside a global install
 

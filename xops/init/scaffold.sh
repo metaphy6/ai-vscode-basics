@@ -246,7 +246,21 @@ fi
 # ── 4. vendor MCP + plugin configs ──────────────────────────────────────
 if [[ $WITH_MCP -eq 1 ]]; then
   log_step "🔌 MCP"
-  copy_file ".mcp.json"
+  # Write a project-specific .mcp.json with the absolute target path baked in.
+  # ${workspaceFolder} is VS Code-only; Claude Code, Cursor, and other generic
+  # MCP clients read .mcp.json and need a real path — not a variable they can't
+  # expand.  (.vscode/mcp.json keeps ${workspaceFolder} because VS Code handles
+  # that itself; .cursor/mcp.json does too because Cursor expands it.)
+  _dst_mcp="$TARGET/.mcp.json"
+  if [[ -e "$_dst_mcp" && $FORCE -eq 0 ]]; then
+    log_dim "  ↩ kept user version: .mcp.json (use --force to overwrite)"
+  elif [[ $DRY_RUN -eq 1 ]]; then
+    log_info "  + would write: .mcp.json (--path $TARGET)"
+  else
+    sed "s|\"serve\", \"--mcp\"\]|\"serve\", \"--mcp\", \"--path\", \"$TARGET\"\]|" \
+      "$SRC_ROOT/.mcp.json" > "$_dst_mcp"
+    log_ok "  + wrote: .mcp.json (--path $TARGET)"
+  fi
 fi
 
 want_agent cursor   && { log_step "✨ .cursor/"; copy_file ".cursor/rules/agents.mdc"; [[ $WITH_MCP -eq 1 ]] && copy_file ".cursor/mcp.json"; }
