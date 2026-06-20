@@ -42,16 +42,13 @@ one in this project — no duplication, no conflict.
 
 ### First-time setup
 
-```bash
-# Build the per-project index (one-time, re-run after large refactors)
-codegraph init -i
-```
-
-If `codegraph` is not yet on your PATH, the `install.sh` / `scaffold.sh` scripts
-will prompt you to install it. Or install manually:
+`scaffold.sh` builds the index automatically during scaffolding (using `npx`
+as a fallback when `codegraph` is not on your PATH). If you need to rebuild
+it after a large refactor, or if you're adding codegraph to an existing
+project that wasn't scaffolded, run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh
+npx @colbymchenry/codegraph init .
 ```
 
 ## Adding a project-scoped server

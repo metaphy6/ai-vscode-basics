@@ -444,50 +444,33 @@ log_dim  "  make help"
 log_dim  "  make doctor"
 log_dim  "  xops/agent/session-bootstrap.sh"
 
-# ── 10. CodeGraph check ─────────────────────────────────────────────────
+# ── 10. CodeGraph index ─────────────────────────────────────────────────
 # CodeGraph gives AI agents a pre-indexed code knowledge graph so they can
 # answer "how does X work?" questions with ~58% fewer tool calls and ~16%
 # lower token cost — 100% local, no API key needed.
-# It manages its own MCP server config via 'codegraph install'; it is NOT
-# baked into the repo's MCP files to avoid conflicts with global installs.
+# The MCP server config (--path ${workspaceFolder}) is already in place from
+# step 4; this step builds the .codegraph/ index so the server can open it.
 if [[ $WITH_MCP -eq 1 && $DRY_RUN -eq 0 ]]; then
   echo >&2
-  log_step "🔍 CodeGraph (optional but recommended)"
+  log_step "🔍 CodeGraph index"
+
+  # Resolve a codegraph runner: prefer a global install, fall back to npx.
+  _CG_CMD=""
   if command -v codegraph >/dev/null 2>&1; then
-    log_ok "  codegraph is already installed ($(codegraph --version 2>/dev/null || echo 'version unknown'))"
-    log_dim "  Run 'codegraph init -i' inside your project to build its index."
-  else
-    log_info "  CodeGraph is a local-only semantic code intelligence tool that lets"
-    log_info "  AI agents explore your codebase via a pre-indexed graph rather than"
-    log_info "  repeatedly grepping files — cutting token usage and tool calls."
-    log_info "  It installs its own MCP server config per agent (global or local),"
-    log_info "  so it never conflicts with this repo's MCP files."
-    echo >&2
-    if [[ -t 0 ]]; then
-      printf "${_YELLOW}⚠️  Install CodeGraph now? (y/N): ${_CR}" >&2
-      read -r _cg_answer </dev/tty
-      if [[ "$_cg_answer" =~ ^[Yy] ]]; then
-        log_step "  Running CodeGraph installer…"
-        log_dim  "  (You will be asked which agent(s) to configure and whether to"
-        log_dim  "   install globally or per-project.)"
-        echo >&2
-        if command -v curl >/dev/null 2>&1; then
-          curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh
-        elif command -v npx >/dev/null 2>&1; then
-          npx @colbymchenry/codegraph install
-        else
-          log_warn "  Neither curl nor npx found. Install manually:"
-          log_dim  "  https://github.com/colbymchenry/codegraph#get-started"
-        fi
-      else
-        log_dim "  Skipped. To install later:"
-        log_dim "  curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh"
-        log_dim "  Then run: codegraph init -i   (inside your project)"
-      fi
+    _CG_CMD="codegraph"
+  elif command -v npx >/dev/null 2>&1; then
+    _CG_CMD="npx -y @colbymchenry/codegraph"
+  fi
+
+  if [[ -n "$_CG_CMD" ]]; then
+    if $_CG_CMD init "$TARGET" >/dev/null 2>&1; then
+      log_ok "  Index built → $TARGET/.codegraph/"
     else
-      # Non-interactive (piped/CI) — just print the hint.
-      log_dim "  To install CodeGraph: curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh"
-      log_dim "  Then run: codegraph init -i   (inside your project)"
+      log_warn "  codegraph init failed — run manually inside the project:"
+      log_dim  "  npx @colbymchenry/codegraph init ."
     fi
+  else
+    log_warn "  Neither codegraph nor npx found — index not built."
+    log_dim  "  Install Node.js, then: npx @colbymchenry/codegraph init ."
   fi
 fi

@@ -84,6 +84,26 @@ chmod +x "$SCAFFOLD"
 
 log_ok "Framework source ready: $(dirname "$(dirname "$SCAFFOLD")")"
 
+# ── sniff --target and --dry-run from forwarded args ─────────────────────
+_TARGET=""
+_DRY_RUN=0
+_args=("$@")
+for (( _i=0; _i<${#_args[@]}; _i++ )); do
+  case "${_args[$_i]}" in
+    --target=*) _TARGET="${_args[$_i]#*=}" ;;
+    --target)   _TARGET="${_args[$(( _i+1 ))]:-}" ;;
+    --dry-run)  _DRY_RUN=1 ;;
+  esac
+done
+[[ -n "$_TARGET" ]] && _TARGET="$(cd "$_TARGET" 2>/dev/null && pwd || echo "$_TARGET")"
+
 # ── delegate to scaffold.sh ───────────────────────────────────────────────
 log_step "Running scaffold.sh $*"
-exec "$SCAFFOLD" "$@"
+"$SCAFFOLD" "$@"
+
+# ── remove scaffolding machinery from target ─────────────────────────────
+# xops/init/ is only needed to bootstrap a project, not to run one.
+if [[ $_DRY_RUN -eq 0 && -n "$_TARGET" && -d "$_TARGET/xops/init" ]]; then
+  rm -rf "$_TARGET/xops/init"
+  log_ok "Removed xops/init/ from target (scaffolding machinery, not needed in project)"
+fi

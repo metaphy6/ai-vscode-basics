@@ -6,3 +6,5 @@ ts_utc,run_id,agent,scope,action,status,summary,refs,commit_sha
 2026-06-02T17:36:10Z,run-20260602173610-645182,copilot,mcp,commit,completed,fix(mcp): remove hardcoded codegraph from MCP configs; add codegraph install prompt in scaffold.sh,,pending
 2026-06-02T17:41:14Z,run-20260602174114-651655,copilot,mcp,commit,completed,fix(mcp): restore codegraph with correct serve --mcp args; workspace entry coexists with global install,,pending
 2026-06-20T11:02:15Z,run-20260620110215-195366,human,mcp/codegraph,commit,completed,"fix(mcp/codegraph): add --path to .mcp.json, remove stale @0.8.0 pin, build index",,pending
+2026-06-20T11:08:17Z,run-20260620110817-205935,human,scaffold/codegraph,commit,completed,"fix(scaffold): auto-run codegraph init in target, npx fallback, drop install prompt",,pending
+2026-06-20T11:09:46Z,run-20260620110946-208241,human,scaffold/install,commit,completed,fix(scaffold): remove xops/init/ from target after install.sh scaffolds,,pending
