@@ -240,17 +240,43 @@ if [[ $WITH_VSCODE -eq 1 ]]; then
   log_step "🖥  .vscode/"
   copy_file ".vscode/settings.json"
   copy_file ".vscode/tasks.json"
-  [[ $WITH_MCP -eq 1 ]] && copy_file ".vscode/mcp.json"
+  if [[ $WITH_MCP -eq 1 ]]; then
+    # Write a .vscode/mcp.json WITHOUT the codegraph server.
+    # VS Code reads BOTH .vscode/mcp.json AND .mcp.json — if codegraph appears
+    # in both, VS Code creates two competing "codegraph" MCP servers.  The one
+    # from .mcp.json (workspace-dot-mcp) shows a Trust prompt; if it starts
+    # inactive (wrong path / stale cache) Copilot shows no tools and the server
+    # disappears from the panel.  Keeping codegraph only in .mcp.json (with the
+    # absolute path baked in below) eliminates the conflict.
+    _dst_vscode_mcp="$TARGET/.vscode/mcp.json"
+    if [[ -e "$_dst_vscode_mcp" && $FORCE -eq 0 ]]; then
+      log_dim "  ↩ kept user version: .vscode/mcp.json"
+    elif [[ $DRY_RUN -eq 1 ]]; then
+      log_info "  + would write: .vscode/mcp.json (no codegraph — already in .mcp.json)"
+    else
+      mkdir -p "$TARGET/.vscode"
+      cat > "$_dst_vscode_mcp" <<'VSCODE_MCP_EOF'
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
+  "$comment": "VS Code Copilot MCP config. VS Code reads both this file and .mcp.json — codegraph is defined only in .mcp.json (with the project's absolute path baked in by scaffold.sh) to avoid duplicate servers. Add other project-specific MCP servers here.",
+  "servers": {},
+  "inputs": []
+}
+VSCODE_MCP_EOF
+      log_ok "  + wrote: .vscode/mcp.json (codegraph in .mcp.json only)"
+    fi
+  fi
 fi
 
 # ── 4. vendor MCP + plugin configs ──────────────────────────────────────
 if [[ $WITH_MCP -eq 1 ]]; then
   log_step "🔌 MCP"
   # Write a project-specific .mcp.json with the absolute target path baked in.
-  # ${workspaceFolder} is VS Code-only; Claude Code, Cursor, and other generic
-  # MCP clients read .mcp.json and need a real path — not a variable they can't
-  # expand.  (.vscode/mcp.json keeps ${workspaceFolder} because VS Code handles
-  # that itself; .cursor/mcp.json does too because Cursor expands it.)
+  # VS Code reads this file directly (workspace-dot-mcp servers) in addition to
+  # .vscode/mcp.json — so this is the single source of truth for codegraph across
+  # ALL clients (Claude Code, Cursor, VS Code Copilot).  The absolute path is
+  # required because non-VS Code clients don't expand ${workspaceFolder} and
+  # launch the MCP server with an unpredictable CWD.
   _dst_mcp="$TARGET/.mcp.json"
   if [[ -e "$_dst_mcp" && $FORCE -eq 0 ]]; then
     log_dim "  ↩ kept user version: .mcp.json (use --force to overwrite)"

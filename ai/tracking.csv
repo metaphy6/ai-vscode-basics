@@ -10,3 +10,4 @@ ts_utc,run_id,agent,scope,action,status,summary,refs,commit_sha
 2026-06-20T11:09:46Z,run-20260620110946-208241,human,scaffold/install,commit,completed,fix(scaffold): remove xops/init/ from target after install.sh scaffolds,,pending
 2026-06-20T11:24:41Z,run-20260620112441-232685,human,scaffold/codegraph,commit,completed,"fix(scaffold): revert  from .mcp.json, remove scaffold.sh from doctor EXECUTABLE",,pending
 2026-06-20T11:34:09Z,run-20260620113409-248842,human,scaffold/codegraph,commit,completed,fix(scaffold): bake absolute project path into .mcp.json at scaffold time,,pending
+2026-06-20T11:45:33Z,run-20260620114533-267874,human,scaffold/codegraph,commit,completed,fix(scaffold): remove codegraph from .vscode/mcp.json in targets; VS Code reads both files creating duplicate inactive server,,pending
