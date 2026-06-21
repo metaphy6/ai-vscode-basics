@@ -59,6 +59,40 @@ project that wasn't scaffolded, run:
 npx @colbymchenry/codegraph init .
 ```
 
+### Index management
+
+The on-disk index lives under [`.codegraph/`](../../.codegraph/) (gitignored
+except for `.gitignore`). Incremental updates happen automatically through
+the file watcher with a ~1 s lag — you do **not** need to re-index after
+every edit.
+
+You **do** need a full re-init when:
+
+- A folder moves or many files are renamed (≥ ~20).
+- Tool responses show the **staleness banner** ("Some files referenced
+  below were edited since the last index sync…") for files you need fresh.
+- `mcp_codegraph_*` returns "no such symbol" for something you know exists.
+- `.codegraph/` is missing entirely.
+- You bumped the `@colbymchenry/codegraph` package version.
+
+```bash
+codegraph init . 2>/dev/null || npx -y @colbymchenry/codegraph init .
+```
+
+Agents follow the [`codegraph-management`](../../.agents/skills/codegraph-management/SKILL.md)
+skill for the full procedure including when, who, and how to record a
+re-index in the tracking log.
+
+### Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| MCP panel shows two `codegraph` entries, one inactive | `codegraph` defined in both `.vscode/mcp.json` *and* `.mcp.json` | Remove the duplicate from `.vscode/mcp.json` (scaffolder does this) |
+| `mcp_codegraph_*` tools missing from picker | Server failed to start, no `.codegraph/` | Run `codegraph init .` |
+| Stale results after a rename | Index lag or partial update | Full re-init |
+| `npx -y @colbymchenry/codegraph` prints help | Missing `serve --mcp` args | Check the `args` array in your MCP config |
+| MCP entry shows the wrong project's symbols | `--path` not absolute (non-VS Code clients don't expand `${workspaceFolder}`) | `scaffold.sh --force` to bake the right path into `.mcp.json` |
+
 ## Adding a project-scoped server
 
 If you have an MCP server that is specific to this project (e.g. a custom

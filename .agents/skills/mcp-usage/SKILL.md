@@ -20,7 +20,9 @@ browser, etc.) instead of a built-in tool.
 3. **Know each server's blast radius.** Read-only (CodeGraph, search) is
    safe to call freely; write-capable (filesystem write, git write,
    browser action) is not.
-4. **Re-index after large refactors** if the server caches (e.g. CodeGraph).
+4. **Re-index after large refactors** if the server caches. For CodeGraph
+   specifically, see [`codegraph-management`](../codegraph-management/SKILL.md)
+   — it covers when to re-index, the exact command, and how to record it.
 5. **One server per concern.** Don't stack three filesystem servers for
    the same job.
 6. **Configure in all three places** (`.mcp.json`, `.vscode/mcp.json`,

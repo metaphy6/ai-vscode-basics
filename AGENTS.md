@@ -212,6 +212,9 @@ You are expected to act, not ask. When you find:
 - a broken build (missing dep, stale artifact) → **fix it** and continue,
 - a stale tracking row that needs amendment → **append a corrective row**
   (rows are append-only; never edit history),
+- a stale CodeGraph index (large refactor, staleness banner, missing symbol)
+  → **re-index it** and record an `action=note, scope=codegraph` row. See
+  [`codegraph-management`](.agents/skills/codegraph-management/SKILL.md),
 - a finding outside the current task's scope → **note it** via a tracking
   row with `action=note` before continuing.
 

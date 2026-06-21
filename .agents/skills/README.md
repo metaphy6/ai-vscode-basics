@@ -49,6 +49,7 @@ saves whole rewrites.
 
 - [`/parallel-subagents`](parallel-subagents/SKILL.md) — When to fan out reads / searches.
 - [`/mcp-usage`](mcp-usage/SKILL.md) — Using MCP servers safely.
+- [`/codegraph-management`](codegraph-management/SKILL.md) — Access, query, re-index, and track the CodeGraph MCP server.
 - [`/tool-search-discipline`](tool-search-discipline/SKILL.md) — Don't pick a tool before you understand the task.
 - [`/safe-run-wrapper`](safe-run-wrapper/SKILL.md) — Wrap risky commands.
 - [`/cost-aware-tool-use`](cost-aware-tool-use/SKILL.md) — Minimise tool calls; batch reads, avoid speculative fetches.
