@@ -1,4 +1,4 @@
-# 🧠 ai/context.md — shared project context pack
+# 🧠 docs/tracking/context.md — shared project context pack
 
 > **This file is the single place for project-specific overrides.**
 > All vendor entry points (`CLAUDE.md`, `GEMINI.md`, `CONVENTIONS.md`,
@@ -21,7 +21,7 @@
 |---|---|
 | Master rulebook | `AGENTS.md` |
 | Project plan | `docs/planning/ROADMAP.md` |
-| Tracking log | `ai/tracking.csv` |
+| Tracking log | `docs/tracking/tracking.csv` |
 | Skills library | `.agents/skills/` |
 | Ops scripts | `xops/` |
 

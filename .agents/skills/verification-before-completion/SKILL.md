@@ -23,7 +23,7 @@ Run through this checklist explicitly. Do not trust the "feels done" feeling.
    - hardcoded paths / secrets / timestamps,
    - files you didn't mean to touch.
 6. **Did tests move with code?** If you added behaviour, is there a new test? If you fixed a bug, is there a regression test?
-7. **Did you append the tracking row?** `tail -3 ai/tracking.csv` to confirm.
+7. **Did you append the tracking row?** `tail -3 docs/tracking/tracking.csv` to confirm.
 8. **`make doctor`** (or its project-specific equivalent) green?
 
 Only then: `git add -A` and stop.

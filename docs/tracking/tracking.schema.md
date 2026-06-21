@@ -1,4 +1,4 @@
-# `ai/tracking.csv` — schema
+# `docs/tracking/tracking.csv` — schema
 
 > **Single source of truth for every agent-driven action in this repository.**
 > Agents append rows; humans push via `make git`. Append-only, validated,
@@ -6,7 +6,7 @@
 
 ## File location & format
 
-- Path: [`ai/tracking.csv`](tracking.csv).
+- Path: [`tracking.csv`](tracking.csv).
 - Encoding: UTF-8, LF line endings, no BOM.
 - Format: RFC 4180 CSV. The header is the first line and is fixed.
 - **Append-only.** Existing rows are immutable. Corrections land as a *new*

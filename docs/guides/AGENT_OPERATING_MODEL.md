@@ -24,14 +24,14 @@ access to the repo. To survive that, the repo owns the operating policy:
    vendor-specific entry point (`CLAUDE.md`, `GEMINI.md`, `.cursor/rules`,
    `.github/copilot-instructions.md`, ...) delegates to it.
 
-2. **Tracking layer** — [`ai/tracking.csv`](../../ai/tracking.csv) is
+2. **Tracking layer** — [`docs/tracking/tracking.csv`](../tracking/tracking.csv) is
    the agent's external memory. Every action that *would* be committed,
    reverted, or noted appears as a row first. Humans push via `make git`;
    agents never `git commit`.
 
 3. **Crash-safe execution** — [`xops/agent/safe-run.sh`](../../xops/agent/safe-run.sh)
    wraps anything risky so the log + exit code survive a killed terminal.
-   [`ai/state/last_failure.json`](../../ai/state/) is the breadcrumb
+   [`docs/tracking/state/last_failure.json`](../tracking/state/) is the breadcrumb
    the next session reads.
 
 4. **Skills library** — [`.agents/skills/`](../../.agents/skills/) holds short,

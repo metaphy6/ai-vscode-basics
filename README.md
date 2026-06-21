@@ -8,8 +8,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![ShellCheck](https://img.shields.io/badge/shellcheck-passing-brightgreen)](https://www.shellcheck.net/)
 [![shfmt](https://img.shields.io/badge/shfmt-formatted-blue)](https://github.com/mvdan/sh)
-[![Scaffolded with](https://img.shields.io/badge/scaffolded--with-v0.1.0-blueviolet)](.ai-vscode-basics-version)
+[![Scaffolded with](https://img.shields.io/badge/scaffolded--with-v1.0.0-blueviolet)](.ai-vscode-basics-version)
 [![Works with 8 agents](https://img.shields.io/badge/works%20with-8%20agents-orange)](docs/guides/MODEL_PROFILES.md)
+
+> **Note:** this README describes the framework repo itself. When you scaffold
+> into a target project, the target gets a small project-template `README.md`
+> instead — and the `.ai-vscode-basics-version`, `install.sh`, and
+> `xops/init/scaffold.sh` files are intentionally **not** copied into it.
 
 ---
 
@@ -52,9 +57,10 @@ It gives every project the same shape:
   thin per-vendor entry points (`CLAUDE.md`, `GEMINI.md`, `CONVENTIONS.md`,
   `.github/copilot-instructions.md`, `.cursor/rules/`, `.codex-plugin/`, …)
   that all delegate back to it. No drift between assistants.
-- 📊 **A 9-column `ai/tracking.csv`** that records every meaningful agent
-  action (plan / implement / test / review / commit / revert / note / block) —
-  the single source of truth `make git` reads to build commit messages.
+- 📊 **A 9-column [`docs/tracking/tracking.csv`](docs/tracking/tracking.csv)** that
+  records every meaningful agent action (plan / implement / test / review /
+  commit / revert / note / block) — the single source of truth `make git` reads
+  to build commit messages.
 - 🤖 **`make git` / `make git.dry`** — agents never run `git commit` / `git push`;
   they append a tracking row and stage files, the human (or `make git`) commits.
 - 🗺️ **A `ROADMAP.md` template** + `docs/{code,project,design,planning,tracking,guides}`
@@ -120,26 +126,30 @@ The agent in your project reads `AGENTS.md` first. That's it.
 
 ---
 
-## 🗂️ What gets installed
+## 🗂️ What gets installed in a scaffolded project
 
 | Path | Purpose |
 |---|---|
 | `AGENTS.md` | Master rulebook (model-agnostic). Every agent reads this first. |
 | `CLAUDE.md` / `GEMINI.md` / `CONVENTIONS.md` | Vendor entry points that delegate to `AGENTS.md`. |
 | `.github/copilot-instructions.md` | Copilot Chat / agent-mode rules. |
-| `.github/chatmodes/` + `.github/prompts/` | Reusable chat modes and slash-command prompts. |
+| `.github/agents/` + `.github/prompts/` | Reusable custom agents and slash-command prompts. |
 | `.cursor/`, `.codex-plugin/`, `.opencode/`, `.claude-plugin/`, `.aider.conf.yml`, `gemini-extension.json` | Per-vendor wiring (mostly minimal — they all point at `AGENTS.md`). |
 | `.vscode/{settings,tasks,mcp}.json` | VS Code workspace defaults. |
 | `.mcp.json` | Repo-level MCP server config (CodeGraph wired; rest stubbed). |
 | `Makefile` | Thin dispatcher → `xops/makefile/*.py`. |
-| `ai/tracking.csv` + `ai/tracking.schema.md` | The 9-column tracking log (blank on fresh install). |
-| `ai/state/` | Session state (checkpoint, last_failure, log.jsonl). |
-| `ai/context.md` | Shared context pack — single file for project-specific overrides. |
-| `xops/init/` | The scaffolder itself — lives in the framework repo, **not copied to targets** by `install.sh`. |
+| `docs/tracking/tracking.csv` + `docs/tracking/tracking.schema.md` | The 9-column tracking log (blank on fresh install). |
+| `docs/tracking/state/` | Session state (checkpoint, last_failure, log.jsonl). |
+| `docs/tracking/context.md` | Shared context pack — single file for project-specific overrides. |
 | `xops/agent/` | `safe-run.sh`, `session-bootstrap.sh`, `tracking_append.sh`, `run-with-retry.sh`. |
 | `xops/makefile/` | Python (stdlib only) ops scripts that `make` dispatches to. |
 | `docs/` | Documentation templates (code/, project/, design/, planning/, tracking/, guides/). |
 | `.agents/skills/` | Curated skill library — one `SKILL.md` per subfolder. |
+
+The scaffolder writes a minimal **project-template `README.md`** into the target
+(only if one does not already exist). The framework's own `README.md`,
+`install.sh`, `xops/init/`, and `.ai-vscode-basics-version` are intentionally
+not copied — those are framework-only artefacts.
 
 See [`docs/guides/AGENT_OPERATING_MODEL.md`](docs/guides/AGENT_OPERATING_MODEL.md)
 for the full design rationale, and
@@ -152,12 +162,12 @@ assistant is wired.
 
 Agents **never** call `git commit` or `git push`. After completing a slice of
 work they call `xops/agent/tracking_append.sh` to add one validated row to
-`ai/tracking.csv` (9 columns: `ts_utc, run_id, agent, scope, action,
+`docs/tracking/tracking.csv` (9 columns: `ts_utc, run_id, agent, scope, action,
 status, summary, refs, commit_sha`), then `git add -A`, then stop. The human
 runs `make git` whenever they're ready; `make git` reads the rows with
 `commit_sha=pending`, builds Conventional Commits from the `summary` field,
 commits, and pushes. `make git.dry` previews everything read-only. The schema
-lives at [`ai/tracking.schema.md`](ai/tracking.schema.md).
+lives at [`docs/tracking/tracking.schema.md`](docs/tracking/tracking.schema.md).
 
 ---
 
@@ -175,25 +185,23 @@ make skills.find TAG=debug  # search by tag or name keyword
 
 ---
 
-## 🛠️ Repo layout
+## 🛠️ Repo layout (the framework itself)
 
 ```
 ai-vscode-basics/
 ├── AGENTS.md, CLAUDE.md, GEMINI.md, CONVENTIONS.md   # rulebooks
 ├── README.md, LICENSE, Makefile, .gitignore          # standard
-├── install.sh                                        # one-liner curl installer
-├── .ai-vscode-basics-version                        # current framework version
-├── .github/, .cursor/, .codex-plugin/, .opencode/   # per-agent wiring
+├── install.sh                                        # one-liner curl installer (framework-only)
+├── .ai-vscode-basics-version                         # current framework version (framework-only)
+├── .github/, .cursor/, .codex-plugin/, .opencode/    # per-agent wiring
 ├── .claude-plugin/, .vscode/, .mcp.json, .aider.conf.yml, gemini-extension.json
 ├── .agents/skills/          # curated skill library (one SKILL.md per subfolder)
-├── ai/                      # tracking log + session state
-│   ├── tracking.csv         # 9-col agent action log (blank on fresh install)
-│   ├── tracking.schema.md
-│   ├── context.md           # shared project context for all agents
-│   └── state/               # checkpoint.json, last_failure.json, log.jsonl
-├── docs/                    # documentation templates
-└── xops/                    # scaffolder + ops scripts
-    ├── init/scaffold.sh     # ← the bootstrapper
+├── docs/
+│   ├── tracking/            # tracking log + schema + state + context
+│   ├── planning/ROADMAP.md
+│   ├── code/, design/, project/, guides/, reports/
+└── xops/
+    ├── init/scaffold.sh     # ← the bootstrapper (framework-only)
     ├── agent/               # safe-run, tracking_append, session-bootstrap
     └── makefile/            # python ops dispatched by Makefile
 ```
@@ -211,5 +219,3 @@ adding a `SKILL.md` under a new subfolder of `.agents/skills/`.
 ## 📄 License
 
 [MIT](LICENSE) — use freely in commercial and open-source projects.
-
-

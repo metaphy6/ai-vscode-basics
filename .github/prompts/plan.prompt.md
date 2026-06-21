@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: Produce a written implementation plan for a feature, fix, or roadmap phase. Read-only — no code changes in this prompt.
 ---
 
 # Plan a piece of work
 
-Switch to the [`planner` chat mode](../chatmodes/planner.chatmode.md) for
+Switch to the [`planner` custom agent](../agents/planner.agent.md) for
 this prompt. Output is a Markdown plan only — no `editFiles`, no `git`.
 
 ## Steps

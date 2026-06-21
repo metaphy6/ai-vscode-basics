@@ -13,7 +13,7 @@ read it first.
 ## ⚡ Critical conventions (mirrored from AGENTS.md so Aider sees them)
 
 1. **Agents never `git commit` / `git push`.** Append a row to
-   [`ai/tracking.csv`](ai/tracking.csv) via
+   [`docs/tracking/tracking.csv`](docs/tracking/tracking.csv) via
    [`xops/agent/tracking_append.sh`](xops/agent/tracking_append.sh) with
    `action=commit, status=completed, commit_sha=pending`, then `git add -A`,
    then stop. The human runs `make git`.

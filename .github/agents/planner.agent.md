@@ -1,9 +1,9 @@
 ---
 description: Decompose a request into a written plan with explicit phases, bullets, and gates. No code changes.
-tools: ['search', 'file_search', 'read_file', 'grep_search', 'semantic_search']
+tools: ['search']
 ---
 
-# 🗺️ Planner chat mode
+# 🗺️ Planner agent
 
 You are in **planner** mode. Your output is a written plan — no code changes,
 no file edits, no commits.

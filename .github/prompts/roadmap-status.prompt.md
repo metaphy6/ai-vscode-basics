@@ -1,5 +1,5 @@
 ---
-mode: ask
+agent: ask
 description: Summarise current ROADMAP.md progress — checked / unchecked / blocked bullets per phase.
 ---
 
@@ -17,7 +17,7 @@ Read [`docs/planning/ROADMAP.md`](../../docs/planning/ROADMAP.md) and produce:
    reason.
 
 Cross-reference with recent rows in
-[`agent/tracking.csv`](../../agent/tracking.csv) (last 20) to flag any
+[`docs/tracking/tracking.csv`](../../docs/tracking/tracking.csv) (last 20) to flag any
 checkbox that should be `[x]` based on a `status=completed` commit row but
 isn't yet.
 

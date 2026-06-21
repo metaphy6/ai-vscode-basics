@@ -1,5 +1,5 @@
-# ══════════════════════════════════════════════════════════════
-#  ai-vscode-basics — model-agnostic agent framework Makefile
+# ┊┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
+#  Model-agnostic agent framework Makefile
 # ──────────────────────────────────────────────────────────────
 #  Targets are thin dispatchers. All real logic lives in
 #  xops/makefile/<module>.py (stdlib-only, cross-platform).
@@ -7,7 +7,7 @@
 #  Convention:
 #    • daily verbs are short  : help, git, doctor, scaffold
 #    • everything else uses   : domain.action  (track.add, git.dry, roadmap.status)
-# ══════════════════════════════════════════════════════════════
+# ┊┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
 
 PYTHON ?= python3
 XOPS   := $(PYTHON) xops/makefile
@@ -40,7 +40,7 @@ git:
 git.dry:
 	@$(XOPS)/git_ops.py dry
 
-## track.add         Append a row to agent/tracking.csv (vars: ACTION STATUS SCOPE AGENT SUMMARY REFS RUN_ID)
+## track.add         Append a row to docs/tracking/tracking.csv (vars: ACTION STATUS SCOPE AGENT SUMMARY REFS RUN_ID)
 track.add:
 	@$(XOPS)/track_ops.py add \
 		--action="$(ACTION)" --status="$(STATUS)" --scope="$(SCOPE)" \

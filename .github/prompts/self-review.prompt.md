@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Self-review the staged diff before handing off to the human.
 ---
 
@@ -14,7 +14,7 @@ Before the human runs `make git`, audit your own staged change:
      test for a fix).
    - No `@Skip` / `skip:` / `xit(` / weakened assertions were introduced.
    - No secrets, hardcoded URLs, or magic numbers leaked in.
-3. Verify [`ai/tracking.csv`](../../ai/tracking.csv) has a `pending`
+3. Verify [`docs/tracking/tracking.csv`](../../docs/tracking/tracking.csv) has a `pending`
    row whose `summary` matches what the diff actually does (Conventional
    Commits format).
 4. Run the project's local test gate one more time (whatever `make test`

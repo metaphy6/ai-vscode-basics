@@ -1,34 +1,3 @@
-# 🧰 `xops/` — ops tree
-
-Everything in this folder is **scaffolder code** and **agent tooling**. None
-of it is project-specific business logic; it is the framework itself.
-
-## Layout
-
-| Path | Purpose |
-|---|---|
-| [`lib/log.sh`](lib/log.sh) | Shared emoji-rich logger sourced by every bash script. |
-| [`init/scaffold.sh`](init/scaffold.sh) | The bootstrapper. Copies the framework into another repo. |
-| [`init/presets/`](init/presets/) | Named scaffold presets (`minimal`, `full`). |
-| [`ai/safe-run.sh`](ai/safe-run.sh) | Crash-safe wrapper for risky commands. Output survives a killed terminal. |
-| [`ai/session-bootstrap.sh`](ai/session-bootstrap.sh) | Print orienting context at agent session start. |
-| [`ai/tracking_append.sh`](ai/tracking_append.sh) | Validated, atomic CSV appender for `ai/tracking.csv`. |
-| [`ai/run-with-retry.sh`](ai/run-with-retry.sh) | Wrap a flaky command in bounded retries with backoff. |
-| [`makefile/_common.py`](makefile/_common.py) | Shared helpers for the Python make dispatchers. |
-| [`makefile/git_ops.py`](makefile/git_ops.py) | `make git` / `make git.dry`. |
-| [`makefile/track_ops.py`](makefile/track_ops.py) | `make track.add` / `make track.list`. |
-| [`makefile/roadmap_ops.py`](makefile/roadmap_ops.py) | `make roadmap.status`. |
-| [`makefile/doctor.py`](makefile/doctor.py) | `make doctor` — verify the framework is wired correctly. |
-
-## Convention
-
-- **Bash scripts** are stdlib-only (no `jq`, no `python -c`) and source
-  `xops/lib/log.sh` for emoji output. They `set -euo pipefail`.
-- **Python scripts** are Python 3.8+ stdlib-only — no third-party packages.
-  Cross-platform (Linux / macOS / Windows). Same emoji conventions.
-- Everything is **idempotent**. Re-running any script must be safe.
-- All file paths in this tree use forward slashes; bash + Python both
-  handle them on Windows.
 # 🛠 `xops/` — agent & makefile ops
 
 Everything in this tree is **plain bash or `python3` stdlib** — no
@@ -41,10 +10,9 @@ runs via Git Bash / WSL).
 ```
 xops/
 ├── README.md         ← you are here
-├── init/             ← the scaffolder that drops this framework into other repos
-│   ├── scaffold.sh
-│   └── _lib.sh
-├── ai/            ← runtime scripts agents call directly
+├── init/             ← the scaffolder (framework-only; stripped from scaffolded projects)
+│   └── scaffold.sh
+├── agent/            ← runtime scripts agents call directly
 │   ├── tracking_append.sh
 │   ├── safe-run.sh
 │   ├── session-bootstrap.sh
@@ -56,6 +24,7 @@ xops/
     ├── git_ops.py
     ├── track_ops.py
     ├── roadmap_ops.py
+    ├── skills_ops.py
     └── doctor.py
 ```
 
@@ -68,8 +37,22 @@ xops/
   pending rows"), `2+` = real error.
 - **All scripts are idempotent.** Re-running them on a clean state is a
   no-op.
-- **Atomic writes.** Anything that touches `ai/tracking.csv` or
-  `ai/state/*.json` uses `flock(1)` or `os.replace()`.
+- **Atomic writes.** Anything that touches `docs/tracking/tracking.csv` or
+  `docs/tracking/state/*.json` uses `flock(1)` or `os.replace()`.
+
+## Key scripts
+
+| Path | Purpose |
+|---|---|
+| [`agent/safe-run.sh`](agent/safe-run.sh) | Crash-safe wrapper for risky commands. Output survives a killed terminal. |
+| [`agent/session-bootstrap.sh`](agent/session-bootstrap.sh) | Print orienting context at agent session start. |
+| [`agent/tracking_append.sh`](agent/tracking_append.sh) | Validated, atomic CSV appender for `docs/tracking/tracking.csv`. |
+| [`agent/run-with-retry.sh`](agent/run-with-retry.sh) | Wrap a flaky command in bounded retries with backoff. |
+| [`makefile/_common.py`](makefile/_common.py) | Shared helpers for the Python make dispatchers. |
+| [`makefile/git_ops.py`](makefile/git_ops.py) | `make git` / `make git.dry`. |
+| [`makefile/track_ops.py`](makefile/track_ops.py) | `make track.add` / `make track.list`. |
+| [`makefile/roadmap_ops.py`](makefile/roadmap_ops.py) | `make roadmap.status`. |
+| [`makefile/doctor.py`](makefile/doctor.py) | `make doctor` — verify the framework is wired correctly. |
 
 ## Add a new Makefile target
 

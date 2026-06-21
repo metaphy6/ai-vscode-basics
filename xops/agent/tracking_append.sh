@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # xops/agent/tracking_append.sh
 #
-# Atomically append ONE row to ai/tracking.csv. Enforces every invariant
-# in ai/tracking.schema.md. Concurrent runs are serialised via flock(1).
+# Atomically append ONE row to docs/tracking/tracking.csv. Enforces every invariant
+# in docs/tracking/tracking.schema.md. Concurrent runs are serialised via flock(1).
 #
 # Usage:
 #   xops/agent/tracking_append.sh \
@@ -29,7 +29,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 # shellcheck source=../lib/log.sh
 source "$REPO_ROOT/xops/lib/log.sh"
 
-CSV="${AVB_CSV:-$REPO_ROOT/ai/tracking.csv}"
+CSV="${AVB_CSV:-$REPO_ROOT/docs/tracking/tracking.csv}"
 LOCK_FD=9
 
 # ── defaults ────────────────────────────────────────────────────────────
@@ -133,7 +133,7 @@ done
 row="${row%,}"
 
 # ── locked atomic append ───────────────────────────────────────────────
-[[ -f "$CSV" ]] || die "$CSV not found (cwd=$PWD, expected at $REPO_ROOT/ai/tracking.csv)" 66
+[[ -f "$CSV" ]] || die "$CSV not found (cwd=$PWD, expected at $REPO_ROOT/docs/tracking/tracking.csv)" 66
 
 exec {LOCK_FD}>>"$CSV"
 flock -x "$LOCK_FD"

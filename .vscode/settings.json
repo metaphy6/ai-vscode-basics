@@ -13,7 +13,7 @@
     }
   },
   "search.exclude": {
-    "**/ai/state/log.jsonl": true,
+    "**/docs/tracking/state/log.jsonl": true,
     "**/tmp/agent-runs": true
   },
   "chat.agentSkillsLocations": {

@@ -27,7 +27,7 @@ The wrapper guarantees:
 - `/tmp/agent-runs/<run-id>.log`  — combined stdout+stderr, tee'd live
 - `/tmp/agent-runs/<run-id>.exit` — exit code (absence = killed mid-run)
 - a heartbeat to stderr every 30s so the UI doesn't go silent.
-- `ai/state/last_failure.json` on non-zero exit (with `resolved: false`).
+- `docs/tracking/state/last_failure.json` on non-zero exit (with `resolved: false`).
 
 If the command failed, follow
 [`non-zero-exit-recovery`](../reliability/non-zero-exit-recovery.prompt.md).

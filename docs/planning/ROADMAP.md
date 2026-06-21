@@ -91,7 +91,7 @@ gate runs all tests + lint + type-check.
 - `scope` column on every row = the phase id (e.g. `phase-2`).
 - One `action=commit, status=completed, commit_sha=pending` row per logical
   commit, with the `summary` in Conventional Commits format. See
-  [`ai/tracking.schema.md`](../../ai/tracking.schema.md).
+  [`docs/tracking/tracking.schema.md`](../tracking/tracking.schema.md).
 
 ## Appendix B — Definition of done
 

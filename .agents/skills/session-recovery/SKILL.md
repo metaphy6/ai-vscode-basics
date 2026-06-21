@@ -18,7 +18,7 @@ interruption, or any time you're picking up work you didn't start.
 2. **Surface any unresolved `last_failure.json` to the user FIRST**, before
    starting new work. The previous session left it as a breadcrumb on
    purpose.
-3. **Read `ai/state/checkpoint.json`** if present. Resume from `step` /
+3. **Read `docs/tracking/state/checkpoint.json`** if present. Resume from `step` /
    `scope` / `last_command`.
 4. **Run `pwd`** and confirm the working directory matches what you expect.
 5. **`git status -s`** — is the tree dirty? Stash, revert, or stage?
@@ -28,7 +28,7 @@ interruption, or any time you're picking up work you didn't start.
 
 When you hit a rate-limit, SIGINT, or any "I have to stop here" event:
 
-1. Write `ai/state/checkpoint.json` with `step`, `scope`, `last_command`,
+1. Write `docs/tracking/state/checkpoint.json` with `step`, `scope`, `last_command`,
    `next_action`.
 2. Append a tracking row: `action=block, status=blocked, summary="..."`.
 3. Exit cleanly. Don't try to be clever with on-exit cleanup.

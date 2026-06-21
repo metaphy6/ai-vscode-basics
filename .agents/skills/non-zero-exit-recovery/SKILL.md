@@ -22,9 +22,9 @@ terminal counts as failure, not as no-op).
    failure? OOM? Syntax error? Be specific.
 3. **Fix that root cause** within the rules (no system-level changes
    without confirmation; no silencing the test; no `|| true`).
-4. **Resume the interrupted task.** If `ai/state/checkpoint.json`
+4. **Resume the interrupted task.** If `docs/tracking/state/checkpoint.json`
    exists, restart from there.
-5. **Mark resolved.** Either delete `ai/state/last_failure.json` or
+5. **Mark resolved.** Either delete `docs/tracking/state/last_failure.json` or
    edit `"resolved": true`.
 
 ## Anti-patterns

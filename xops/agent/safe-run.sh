@@ -10,7 +10,7 @@
 #   /tmp/agent-runs/<run-id>.log   # combined stdout+stderr (live tee)
 #   /tmp/agent-runs/<run-id>.exit  # exit code (absence = killed mid-run)
 #
-# On non-zero exit also writes ai/state/last_failure.json so the next
+# On non-zero exit also writes docs/tracking/state/last_failure.json so the next
 # session-bootstrap surfaces it.
 #
 # Usage:
@@ -88,7 +88,7 @@ fi
 printf '%s\n' "$rc" > "$EXIT_FILE"
 
 if [ "$rc" -ne 0 ]; then
-  STATE_DIR="$REPO_ROOT/ai/state"
+  STATE_DIR="$REPO_ROOT/docs/tracking/state"
   mkdir -p "$STATE_DIR"
   # Inline JSON — no jq dependency.
   cmd_escaped="$(printf '%s' "$*" | sed 's/\\/\\\\/g; s/"/\\"/g')"

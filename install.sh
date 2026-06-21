@@ -101,9 +101,14 @@ done
 log_step "Running scaffold.sh $*"
 "$SCAFFOLD" "$@"
 
-# ── remove scaffolding machinery from target ─────────────────────────────
-# xops/init/ is only needed to bootstrap a project, not to run one.
-if [[ $_DRY_RUN -eq 0 && -n "$_TARGET" && -d "$_TARGET/xops/init" ]]; then
-  rm -rf "$_TARGET/xops/init"
-  log_ok "Removed xops/init/ from target (scaffolding machinery, not needed in project)"
+# ── remove scaffolding machinery + framework-only artefacts from target ──
+# xops/init/, install.sh, and the version stamp are only needed to bootstrap
+# a project — they have no role inside a scaffolded project.
+if [[ $_DRY_RUN -eq 0 && -n "$_TARGET" && -d "$_TARGET" ]]; then
+  for _f in "xops/init" ".ai-vscode-basics-version" "install.sh"; do
+    if [[ -e "$_TARGET/$_f" ]]; then
+      rm -rf "$_TARGET/$_f"
+      log_ok "Removed framework-only artefact from target: $_f"
+    fi
+  done
 fi

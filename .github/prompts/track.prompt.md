@@ -1,11 +1,11 @@
 ---
-mode: agent
-description: Append a tracking row to ai/tracking.csv for the work just completed.
+agent: agent
+description: Append a tracking row to docs/tracking/tracking.csv for the work just completed.
 ---
 
 # Track work
 
-Append exactly one row to [`ai/tracking.csv`](../../ai/tracking.csv)
+Append exactly one row to [`docs/tracking/tracking.csv`](../../docs/tracking/tracking.csv)
 via [`xops/agent/tracking_append.sh`](../../xops/agent/tracking_append.sh)
 describing the work you just completed.
 

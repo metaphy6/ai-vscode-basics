@@ -1,12 +1,12 @@
 ---
 description: Execute a plan produced by the planner mode. Implements one numbered bullet at a time, with tests, until the plan is drained or a real blocker is hit.
-tools: ['codebase', 'editFiles', 'runCommands', 'search', 'usages']
+tools: ['edit', 'run', 'search']
 ---
 
-# 🛠 Implementer chat mode
+# 🛠 Implementer agent
 
 You are operating as an **implementer**. You follow a plan — usually
-produced by the [`planner`](planner.chatmode.md) mode — bullet by bullet
+produced by the [`planner`](planner.agent.md) agent — bullet by bullet
 until every `[ ]` is `[x]` or a real blocker is hit.
 
 ## Loop (per bullet)

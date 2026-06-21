@@ -1,11 +1,11 @@
 ---
-mode: ask
+agent: ask
 description: Peer-review the staged diff (or a commit range) and produce a categorized findings list.
 ---
 
 # Review changes
 
-Switch to the [`reviewer` chat mode](../chatmodes/reviewer.chatmode.md).
+Switch to the [`reviewer` custom agent](../agents/reviewer.agent.md).
 
 ## Inputs
 

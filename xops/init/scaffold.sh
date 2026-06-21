@@ -23,12 +23,13 @@
 #   -h | --help           This message.
 #
 # What gets installed (full preset):
-#   - Root: README, LICENSE, AGENTS.md, CLAUDE.md, GEMINI.md, CONVENTIONS.md,
+#   - Root: LICENSE, AGENTS.md, CLAUDE.md, GEMINI.md, CONVENTIONS.md,
 #           Makefile, .gitignore, .gitattributes
-#   - .github/        copilot-instructions.md + chatmodes/ + prompts/
+#           (README.md is NOT copied — a project-template README is written instead)
+#   - .github/        copilot-instructions.md + agents/ + prompts/
 #   - .vscode/        settings, tasks, mcp
 #   - Vendor configs  matching --agents
-#   - ai/          tracking.csv + schema + state/
+#   - docs/tracking/  tracking.csv + schema + context + state/
 #   - xops/           bash + python ops tree (this script itself + siblings)
 #   - docs/           code/ project/ design/ planning/ROADMAP.md tracking/ guides/
 #   - .agents/skills/ skill library (one SKILL.md per subfolder)
@@ -216,11 +217,57 @@ want_agent() {
 
 # ── 1. root files ───────────────────────────────────────────────────────
 log_step "📦 root files"
+# Intentionally NOT copied: README.md (a project template is written below),
+# install.sh, .ai-vscode-basics-version (framework-only artefacts).
 ROOT_FILES=(
-  "README.md" "LICENSE" "AGENTS.md" "Makefile"
+  "LICENSE" "AGENTS.md" "Makefile"
   ".gitignore" ".gitattributes"
 )
 for f in "${ROOT_FILES[@]}"; do copy_file "$f"; done
+
+# Write a project-template README.md (only if target has none, unless --force).
+_dst_readme="$TARGET/README.md"
+_target_name="$(basename "$TARGET")"
+if [[ -e "$_dst_readme" && $FORCE -eq 0 ]]; then
+  log_dim "  ↩ kept user version: README.md"
+elif [[ $DRY_RUN -eq 1 ]]; then
+  log_info "  + would write: README.md (project template)"
+else
+  cat > "$_dst_readme" <<README_EOF
+# $_target_name
+
+> _Describe what this project does in one sentence._
+
+## Quickstart
+
+\`\`\`bash
+# install dependencies (edit for your stack)
+make doctor          # sanity-check the agent framework wiring
+\`\`\`
+
+## Documentation
+
+- [\`AGENTS.md\`](AGENTS.md) — rules every AI coding assistant follows in this repo.
+- [\`docs/planning/ROADMAP.md\`](docs/planning/ROADMAP.md) — the plan.
+- [\`docs/tracking/README.md\`](docs/tracking/README.md) — how the tracking log works.
+- [\`docs/tracking/context.md\`](docs/tracking/context.md) — project context pack.
+- [\`.agents/skills/README.md\`](.agents/skills/README.md) — curated skill library.
+
+## Common commands
+
+\`\`\`bash
+make help            # list available targets
+make git.dry         # preview pending commits (read-only)
+make git             # commit pending tracking rows + push
+make track.add ACTION=note SUMMARY="..."
+\`\`\`
+
+## License
+
+See [\`LICENSE\`](LICENSE).
+README_EOF
+  log_ok "  + wrote: README.md (project template for '$_target_name')"
+fi
 
 # Vendor entrypoint files — only for selected agents.
 want_agent claude  && copy_file "CLAUDE.md"
@@ -231,7 +278,7 @@ want_agent aider   && copy_file "CONVENTIONS.md" && copy_file ".aider.conf.yml"
 if want_agent copilot; then
   log_step "🐙 .github/ (Copilot)"
   copy_file ".github/copilot-instructions.md"
-  copy_glob ".github/chatmodes/*.chatmode.md"
+  copy_glob ".github/agents/*.agent.md"
   copy_glob ".github/prompts/*.prompt.md"
 fi
 
@@ -295,26 +342,26 @@ want_agent codex    && { log_step "🧪 .codex-plugin/"; copy_file ".codex-plugi
 want_agent opencode && { log_step "🪩 .opencode/"; copy_file ".opencode/config.json"; }
 want_agent gemini   && { log_step "💎 gemini-extension"; copy_file "gemini-extension.json"; }
 
-# ── 5. ai/ ───────────────────────────────────────────────────────────
-log_step "📊 ai/"
+# ── 5. docs/tracking/ ─────────────────────────────────────────────────────────────
+log_step "📋 docs/tracking/"
 # Always write a BLANK tracking.csv (just the header) — never copy the source
 # repo's history into a freshly scaffolded project.
 if [[ $DRY_RUN -eq 0 ]]; then
-  mkdir -p "$TARGET/ai/state"
-  BLANK_CSV="$TARGET/ai/tracking.csv"
+  mkdir -p "$TARGET/docs/tracking/state"
+  BLANK_CSV="$TARGET/docs/tracking/tracking.csv"
   if [[ -e "$BLANK_CSV" && $FORCE -eq 0 ]]; then
-    log_dim "  ↩ kept user version: ai/tracking.csv (use --force to reset)"
+    log_dim "  ↩ kept user version: docs/tracking/tracking.csv (use --force to reset)"
   else
     printf 'ts_utc,run_id,agent,scope,action,status,summary,refs,commit_sha\n' > "$BLANK_CSV"
-    log_ok "  + created: ai/tracking.csv (blank)"
+    log_ok "  + created: docs/tracking/tracking.csv (blank)"
   fi
 else
-  log_info "  + would create: ai/tracking.csv (blank header only)"
+  log_info "  + would create: docs/tracking/tracking.csv (blank header only)"
 fi
-copy_file "ai/tracking.schema.md"
-copy_file "ai/README.md"
-copy_file "ai/state/.gitkeep"
-copy_file "ai/context.md"
+copy_file "docs/tracking/tracking.schema.md"
+copy_file "docs/tracking/README.md"
+copy_file "docs/tracking/state/.gitkeep"
+copy_file "docs/tracking/context.md"
 
 # ── 6. xops/ ────────────────────────────────────────────────────────────
 log_step "🛠  xops/"
@@ -353,18 +400,11 @@ else
 fi
 
 # ── done ────────────────────────────────────────────────────────────────
+# The .ai-vscode-basics-version stamp and install.sh are intentionally NOT
+# copied into the target — those are framework-only artefacts. The target
+# stands on its own once scaffolded.
 
-# ── 8. version stamp ────────────────────────────────────────────────────
-if [[ $DRY_RUN -eq 0 ]]; then
-  VERSION_FILE="$SRC_ROOT/.ai-vscode-basics-version"
-  TARGET_VER="$TARGET/.ai-vscode-basics-version"
-  if [[ -f "$VERSION_FILE" ]]; then
-    cp -a "$VERSION_FILE" "$TARGET_VER"
-    log_ok "  + version: $(cat "$VERSION_FILE")"
-  fi
-fi
-
-# ── 9. language preset ──────────────────────────────────────────────────
+# ── 8. language preset ───────────────────────────────────────────────────────────
 if [[ -n "$LANG" ]]; then
   log_step "🗣  language preset: $LANG"
   _lang_mk="$TARGET/Makefile.lang.mk"
@@ -484,7 +524,7 @@ log_dim  "  make help"
 log_dim  "  make doctor"
 log_dim  "  xops/agent/session-bootstrap.sh"
 
-# ── 10. CodeGraph index ─────────────────────────────────────────────────
+# ── 9. CodeGraph index ──────────────────────────────────────────────────
 # CodeGraph gives AI agents a pre-indexed code knowledge graph so they can
 # answer "how does X work?" questions with ~58% fewer tool calls and ~16%
 # lower token cost — 100% local, no API key needed.

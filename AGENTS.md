@@ -1,10 +1,10 @@
 <!--
 AGENTS.md — model-agnostic master rulebook.
 
-Every AI coding assistant working in a repository scaffolded from
-ai-vscode-basics reads THIS FILE FIRST. Vendor entry points
-(CLAUDE.md, GEMINI.md, CONVENTIONS.md, .github/copilot-instructions.md,
-.cursor/rules/, .codex-plugin/, .opencode/) all delegate here.
+Every AI coding assistant working in this repository reads THIS FILE FIRST.
+Vendor entry points (CLAUDE.md, GEMINI.md, CONVENTIONS.md,
+.github/copilot-instructions.md, .cursor/rules/, .codex-plugin/, .opencode/)
+all delegate here.
 
 Keep this file short, scannable, and authoritative. Project-specific
 rules belong in docs/project/CHARTER.md or .github/copilot-instructions.md,
@@ -18,8 +18,7 @@ session hygiene). Project files win for domain logic.
 # 🤖 AGENTS.md — operating rules for AI coding assistants
 
 You are an AI coding assistant (GitHub Copilot, Claude, Gemini, Codex CLI,
-Cursor, OpenCode, Aider, or a local model) working in a repository scaffolded
-from [`ai-vscode-basics`](https://github.com/metaphy6/ai-vscode-basics).
+Cursor, OpenCode, Aider, or a local model) working in this repository.
 
 The mental model: **act like a senior software engineer responsible for the
 long-term health of this codebase.** Stability, security, reliability,
@@ -38,7 +37,7 @@ does not already exist. The canonical map for this kind of repo is:
 - `README.md` — what this project is and how to run it.
 - `docs/README.md` — documentation index.
 - `docs/planning/ROADMAP.md` — **the** plan. Single source of truth.
-- `docs/tracking/README.md` + `ai/tracking.schema.md` — tracking model.
+- `docs/tracking/README.md` + `docs/tracking/tracking.schema.md` — tracking model.
 - `.agents/skills/README.md` — curated skill library; load the relevant skill
   before doing the kind of work it covers.
 - `docs/guides/AGENT_OPERATING_MODEL.md` — why this framework exists.
@@ -58,7 +57,7 @@ recurring failure mode and is forbidden.
 **Agents NEVER call `git commit` or `git push`.** After completing a slice
 of work, the agent:
 
-1. Appends one row to [`ai/tracking.csv`](ai/tracking.csv) via
+1. Appends one row to [`docs/tracking/tracking.csv`](docs/tracking/tracking.csv) via
    [`xops/agent/tracking_append.sh`](xops/agent/tracking_append.sh) with
    `action=commit`, `status=completed`, `commit_sha=pending`, and a
    `summary` that follows [Conventional Commits](https://www.conventionalcommits.org/)
@@ -78,7 +77,7 @@ Every task must terminate in **exactly one** of these states:
 | `staged` | Gates green AND working tree has real changes | Append tracking row with `commit_sha=pending`, then `git add -A`. Report files staged + `run_id`. |
 | `reverted` | Any gate failed | `git restore .` (or `git reset --hard HEAD` if local-only). Append a tracking row with `action=revert`, `status=failed`. No staging. |
 | `no-op` | `git status -s` was already clean and no edits were needed | Say so in one line. |
-| `blocked` | A real blocker (rebase needed, decision required, scope outside allow-list) | Write `ai/state/checkpoint.json`, append `action=block`/`status=blocked` row, report. |
+| `blocked` | A real blocker (rebase needed, decision required, scope outside allow-list) | Write `docs/tracking/state/checkpoint.json`, append `action=block`/`status=blocked` row, report. |
 
 You are **forbidden** from inventing a fifth state ("I'll let you review and
 commit"). If gates are green and the diff is real, **you stage**.
@@ -156,16 +155,16 @@ Chat sessions and terminals can die mid-task. Before doing real work in any
 session you must:
 
 1. Run [`xops/agent/session-bootstrap.sh`](xops/agent/session-bootstrap.sh)
-   (or read its outputs: `ai/state/current.json`,
-   `ai/state/checkpoint.json`, the tail of `ai/state/log.jsonl`, and
-   `ai/state/last_failure.json` if present).
+   (or read its outputs: `docs/tracking/state/current.json`,
+   `docs/tracking/state/checkpoint.json`, the tail of `docs/tracking/state/log.jsonl`, and
+   `docs/tracking/state/last_failure.json` if present).
 2. Surface any **unresolved** `last_failure.json` at the top of your reply
    before starting new work.
 3. Run `pwd` and confirm it matches the expected working directory before
    every build / test / git command.
 4. Clean up only files you yourself created in `/tmp/agent-runs/`.
 5. On 429 / rate-limit / SIGINT mid-task, write
-   `ai/state/checkpoint.json` with `step`, `scope`, `last_command`, then
+   `docs/tracking/state/checkpoint.json` with `step`, `scope`, `last_command`, then
    exit cleanly. Do not attempt destructive cleanup on the way out.
 
 ### 5a. Non-zero exit recovery — never get stuck on "Analyzing…"
@@ -178,7 +177,7 @@ recoverable context. This is **never** acceptable.
    The wrapper writes the command, env subset, full combined output, and
    final exit code to `/tmp/agent-runs/<run-id>.{cmd,log,exit}` *before*
    the parent shell can lose them, and on non-zero exit also drops
-   `ai/state/last_failure.json` as a recovery breadcrumb.
+   `docs/tracking/state/last_failure.json` as a recovery breadcrumb.
 
 2. **On every non-zero exit the response order is fixed:**
    1. **Read** the run's `.log` file (`tail -200`, then full if needed) —
@@ -288,6 +287,6 @@ known divergences require explicit attention:
   [`phase-persistence`](.agents/skills/phase-persistence/SKILL.md)
   skill, not polite engineering. Drain the named scope, then hand back.
 
-For Copilot-specific chat modes and slash commands, see
+For Copilot-specific custom agents and slash commands, see
 [`.github/copilot-instructions.md`](.github/copilot-instructions.md) and
-[`.github/chatmodes/`](.github/chatmodes/).
+[`.github/agents/`](.github/agents/).

@@ -27,9 +27,9 @@ CHECKS_REQUIRED = [
     "Makefile",
     ".gitignore",
     ".github/copilot-instructions.md",
-    "ai/tracking.csv",
-    "ai/tracking.schema.md",
-    "ai/README.md",
+    "docs/tracking/tracking.csv",
+    "docs/tracking/tracking.schema.md",
+    "docs/tracking/README.md",
     "xops/lib/log.sh",
     "xops/agent/tracking_append.sh",
     "xops/agent/safe-run.sh",
@@ -189,7 +189,7 @@ def _check_skill_links(failures: list[str]) -> None:
 
 
 def main() -> None:
-    info(f"🩺 doctor — checking ai-vscode-basics framework in {REPO_ROOT}")
+    info(f"🩺 doctor — checking framework wiring in {REPO_ROOT}")
     failures: list[str] = []
     _check_exists(failures)
     _check_executable(failures)

@@ -69,11 +69,11 @@ test_real_run_blank_tracking_csv() {
   bash "$SCAFFOLD" --target "$target" >/dev/null 2>&1
 
   local lines=""
-  if [[ -f "$target/ai/tracking.csv" ]]; then
-    lines="$(wc -l < "$target/ai/tracking.csv")"
+  if [[ -f "$target/docs/tracking/tracking.csv" ]]; then
+    lines="$(wc -l < "$target/docs/tracking/tracking.csv")"
   fi
-  ok_if "ai/tracking.csv exists after real run" "$([[ -f "$target/ai/tracking.csv" ]] && echo true || echo false)"
-  ok_if "ai/tracking.csv is header-only (1 line, got $lines)" "$([[ "$lines" -eq 1 ]] && echo true || echo false)"
+  ok_if "docs/tracking/tracking.csv exists after real run" "$([[ -f "$target/docs/tracking/tracking.csv" ]] && echo true || echo false)"
+  ok_if "docs/tracking/tracking.csv is header-only (1 line, got $lines)" "$([[ "$lines" -eq 1 ]] && echo true || echo false)"
 
   rm -rf "$target"
 }

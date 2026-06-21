@@ -1,6 +1,6 @@
 """xops/makefile/git_ops.py — `make git` and `make git.dry`.
 
-Reads ai/tracking.csv, finds rows with action=commit, status=completed,
+Reads docs/tracking/tracking.csv, finds rows with action=commit, status=completed,
 commit_sha=pending whose run_id does NOT already appear in any commit
 message, groups them by run_id (one commit per run_id), then either previews
 or commits + pushes.

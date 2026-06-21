@@ -45,7 +45,7 @@ def cmd_add(_args: List[str]) -> None:
 
 
 def cmd_list(_args: List[str]) -> None:
-    step("📋 make track.list — last 20 rows of ai/tracking.csv")
+    step("📋 make track.list — last 20 rows of docs/tracking/tracking.csv")
     if not TRACKING_CSV.exists():
         err(f"{TRACKING_CSV} not found")
         sys.exit(66)

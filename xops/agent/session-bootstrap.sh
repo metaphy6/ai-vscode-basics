@@ -5,10 +5,10 @@
 # the agent needs to avoid disorientation after a killed terminal or window
 # reload:
 #   - cwd, branch, last commit, dirty status
-#   - unresolved ai/state/last_failure.json (if any)
-#   - ai/state/checkpoint.json (if any)
-#   - ai/state/current.json status
-#   - last 5 rows of ai/tracking.csv
+#   - unresolved docs/tracking/state/last_failure.json (if any)
+#   - docs/tracking/state/checkpoint.json (if any)
+#   - docs/tracking/state/current.json status
+#   - last 5 rows of docs/tracking/tracking.csv
 #
 # Read-only. Does not change state, install packages, or run tests.
 
@@ -21,7 +21,7 @@ source "$HERE/../lib/log.sh"
 
 cd "$REPO_ROOT"
 
-log_step "ai-vscode-basics — session bootstrap"
+log_step "session bootstrap"
 log_dim  "  repo : $REPO_ROOT"
 log_dim  "  pwd  : $PWD"
 log_dim  "  date : $(date -Iseconds)"
@@ -46,7 +46,7 @@ echo >&2
 
 # ── agent state ────────────────────────────────────────────────────────
 log_step "🧠 agent state"
-STATE_DIR="$REPO_ROOT/ai/state"
+STATE_DIR="$REPO_ROOT/docs/tracking/state"
 last_failure="$STATE_DIR/last_failure.json"
 checkpoint="$STATE_DIR/checkpoint.json"
 current="$STATE_DIR/current.json"
@@ -87,7 +87,7 @@ echo >&2
 
 # ── tracking.csv tail ──────────────────────────────────────────────────
 log_step "📋 tracking.csv (last 5)"
-CSV="$REPO_ROOT/ai/tracking.csv"
+CSV="$REPO_ROOT/docs/tracking/tracking.csv"
 if [[ -f "$CSV" ]]; then
   row_count="$(($(wc -l < "$CSV") - 1))"
   log_info "rows: $row_count"

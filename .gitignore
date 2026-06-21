@@ -6,8 +6,8 @@ __pycache__/
 .DS_Store
 
 # scaffold output / per-project agent runtime
-agent/state/*
-!agent/state/.gitkeep
+docs/tracking/state/*
+!docs/tracking/state/.gitkeep
 
 # editor noise
 .idea/

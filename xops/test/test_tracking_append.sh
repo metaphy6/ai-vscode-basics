@@ -3,7 +3,7 @@
 # Tests for xops/agent/tracking_append.sh
 #
 # Each test_ function is called in sequence; a non-zero exit = failure.
-# Tests run in isolated temp dirs so ai/tracking.csv is never touched.
+# Tests run in isolated temp dirs so docs/tracking/tracking.csv is never touched.
 
 set -euo pipefail
 

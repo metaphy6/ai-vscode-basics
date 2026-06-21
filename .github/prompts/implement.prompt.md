@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: Execute a plan end-to-end. Drains every checklist bullet, ships tests with code, ends in staged / reverted / no-op / blocked.
 ---
 
 # Implement a plan
 
-Switch to the [`implementer` chat mode](../chatmodes/implementer.chatmode.md).
+Switch to the [`implementer` custom agent](../agents/implementer.agent.md).
 
 ## Core Rule: Complete Phase → No Interruption
 
@@ -14,7 +14,7 @@ Switch to the [`implementer` chat mode](../chatmodes/implementer.chatmode.md).
 - ✅ **Complete scope**: every bullet → ticked `[x]`
 - ✅ **Tests with code**: behavior-changing commits include tests
 - ✅ **Tracking discipline**: one row per logical delivery unit
-- ✅ **Checkpoints**: save progress in `ai/state/checkpoint.json` + session memory if turn is interrupted
+- ✅ **Checkpoints**: save progress in `docs/tracking/state/checkpoint.json` + session memory if turn is interrupted
 - ❌ **No handoff**: "you can review and commit" is not a terminal state
 - ❌ **No token excuses**: throttle context carefully so the phase completes in one session
 
@@ -48,7 +48,7 @@ Switch to the [`implementer` chat mode](../chatmodes/implementer.chatmode.md).
 
 If you approach context limits **before completing the phase:**
 
-1. **Write a checkpoint** to `ai/state/checkpoint.json`:
+1. **Write a checkpoint** to `docs/tracking/state/checkpoint.json`:
    ```json
    {
      "phase": "0a.1",
@@ -78,6 +78,6 @@ Report exactly one. **For phase implementation, `staged` only reports when the E
 - **`staged`** — **every `[ ]` bullet in the phase is now `[x]`, gates green, tracking rows appended, ROADMAP ticked, `git add -A` clean.** Report `run_id`s, file list, and the ticked box count. This is the **only success state for phase implementation**.
 - **`reverted`** — a bullet failed, could not be fixed within the rules, and the user declined to unblock it. Append `action=revert, status=failed`. `git restore .`. *This should be rare; most failures can be fixed within the loop.*
 - **`no-op`** — `git status -s` was already clean and no edit was needed (only for single-file plans, not phases).
-- **`blocked`** — a documented real blocker hit (not a token budget). Write `ai/state/checkpoint.json` + session memory + `action=block` tracking row. *The phase is partially complete; the next session resumes from the checkpoint.*
+- **`blocked`** — a documented real blocker hit (not a token budget). Write `docs/tracking/state/checkpoint.json` + session memory + `action=block` tracking row. *The phase is partially complete; the next session resumes from the checkpoint.*
 
 **Note:** "I'll let you review and commit" is not a state. "Partial completion" is not a state. "Token limits" is not a state. Only `staged` (full phase done), `reverted` (fatal error, user opt-out), `no-op` (nothing to do), or `blocked` (real blocker, checkpoint written).

@@ -5,9 +5,8 @@ Delegates to AGENTS.md and adds Gemini-specific behavioural notes.
 
 # 🤖 GEMINI.md — entry point for Gemini
 
-Hello, Gemini. This repository uses the [`ai-vscode-basics`](https://github.com/metaphy6/ai-vscode-basics)
-multi-assistant framework. Please read these documents in order before
-doing any real work:
+Hello, Gemini. Please read these documents in order before doing any real
+work:
 
 1. [`AGENTS.md`](AGENTS.md) — the master rulebook (commit/push policy,
    tracking, tests, system safety, session recovery, security).
@@ -20,7 +19,7 @@ doing any real work:
 ## ⚡ Short summary
 
 - **Never `git commit` / `git push`.** Append a row to
-  [`ai/tracking.csv`](ai/tracking.csv) via
+  [`docs/tracking/tracking.csv`](docs/tracking/tracking.csv) via
   [`xops/agent/tracking_append.sh`](xops/agent/tracking_append.sh), then
   `git add -A`. Human runs `make git`.
 - **Tests ship with code in the same commit.** No skipping, no weakening.
