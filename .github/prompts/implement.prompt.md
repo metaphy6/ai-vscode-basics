@@ -37,7 +37,7 @@ Switch to the [`implementer` custom agent](../agents/implementer.agent.md).
    - Restart from a clean tree if needed.
 5. Append a tracking row via
    [`xops/agent/tracking_append.sh`](../../xops/agent/tracking_append.sh):
-   `--action=commit --status=completed --commit-sha=pending --summary="..."`. 
+   `--action=commit --status=completed --commit-sha=pending --summary="..."`.
 6. **Tick the bullet's checkbox** in ROADMAP.md (or the plan document) using `multi_replace_string_in_file`.
 7. `git add -A`.
 8. **Move to the next `[ ]` bullet.** **Do not stop.** Do not hand back to the user. Do not cite token count or context limits. Keep going until:
