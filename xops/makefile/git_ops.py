@@ -15,6 +15,7 @@ Refuses to commit if the working tree is dirty AND no pending row exists
 from __future__ import annotations
 
 import csv
+import re
 import sys
 from pathlib import Path
 from typing import Iterable, List
@@ -23,6 +24,21 @@ from _common import (
     BOLD, DIM, RESET, REPO_ROOT, TRACKING_CSV, dim, dispatch, err, info, ok,
     out, run, step, warn,
 )
+
+# Conventional Commits subject: <type>(<scope>)?(!)?: <description>.
+# Mirrors the gate in xops/agent/tracking_append.sh. The commit subject is the
+# tracking row's `summary` verbatim, so this is the last line of defense that
+# keeps the commit log Conventional-Commits-clean even if tracking.csv was
+# hand-edited around the appender.
+_CC_RE = re.compile(
+    r"^(feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)"
+    r"(\([^)]+\))?!?:\s.+"
+)
+
+
+def is_conventional_commit(subject: str) -> bool:
+    """True iff `subject` is a valid Conventional Commits subject line."""
+    return bool(_CC_RE.match(subject))
 
 
 def _read_pending_rows() -> List[dict]:
@@ -126,6 +142,8 @@ def cmd_dry(_args: List[str]) -> None:
         print(f"{BOLD}── would commit: [{rid}] ──{RESET}", file=sys.stderr)
         for line in msg.splitlines():
             print(f"    {line}", file=sys.stderr)
+        if not is_conventional_commit(group[0]["summary"]):
+            warn(f"  ⚠️  subject is NOT Conventional Commits — `make git` will refuse: {group[0]['summary']!r}")
     print()
     if _working_tree_dirty():
         info("staged + unstaged changes (git status --short):")
@@ -151,6 +169,21 @@ def cmd_push(_args: List[str]) -> None:
     if not new_groups:
         ok("all pending rows already correspond to existing commits — nothing to do")
         return
+
+    # Final Conventional-Commits gate before anything is committed. Validate
+    # every subject up front and refuse the whole batch on the first offender,
+    # so a bad subject never reaches the commit log and we never commit a
+    # partial batch.
+    offenders = [
+        g[0] for g in new_groups if not is_conventional_commit(g[0]["summary"])
+    ]
+    if offenders:
+        err("refusing to commit: non-Conventional-Commits subject(s) in tracking.csv")
+        for r in offenders:
+            err(f"  [{r['run_id']}] {r['summary']!r}")
+        err("  required: <type>(<scope>)?(!)?: <description>")
+        err("  fix the row's summary (append a corrective row) and re-run.")
+        sys.exit(65)
 
     # Stage everything first (humans may have left things unstaged).
     run(["git", "add", "-A"])

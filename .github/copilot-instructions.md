@@ -52,7 +52,11 @@ with a new file at a different path.
 |---|---|---|
 | `planner` | Decomposing a request into a roadmap or implementation plan | [`agents/planner.agent.md`](agents/planner.agent.md) |
 | `implementer` | Executing a plan / phase end-to-end with tracking + staging | [`agents/implementer.agent.md`](agents/implementer.agent.md) |
-| `reviewer` | Self-review or peer-review of staged or recent changes | [`agents/reviewer.agent.md`](agents/reviewer.agent.md) |
+| `reviewer` | Reviewing a phase's staged diff (middle stage of the per-phase gate) | [`agents/reviewer.agent.md`](agents/reviewer.agent.md) |
+| `verifier` | Final mechanical gate per phase: `make verify` cold + invariant checks | [`agents/verifier.agent.md`](agents/verifier.agent.md) |
+
+Each `/implement` phase runs the **`implementer → reviewer → verifier`** gate
+before the next phase starts — no exceptions.
 
 ## ⚡ Slash commands
 
@@ -61,6 +65,7 @@ with a new file at a different path.
 | `/plan` | Produce a written plan (no code) for a request. |
 | `/implement` | Execute a plan / phase end-to-end, ending in `staged` / `reverted` / `no-op` / `blocked`. |
 | `/review` | Self-review or peer-review staged or recent changes against AGENTS.md rules. |
+| `/verify` | Run the mechanical verification gate (`make verify` + invariants) and return PASS / FAIL. |
 | `/track` | Append a tracking row (used implicitly by `/implement`). |
 | `/roadmap-status` | Summarize ROADMAP checkbox progress. |
 

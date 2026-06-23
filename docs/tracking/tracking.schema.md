@@ -24,7 +24,7 @@
 | 4 | `scope` | string (≤ 40 chars) | yes | What the work touches — a phase id (`phase-1.2`), module slug (`auth`), area (`docs`), or chore tag (`tooling`). Free-form but short. |
 | 5 | `action` | enum | yes | `plan \| implement \| test \| review \| commit \| revert \| note \| block`. |
 | 6 | `status` | enum | yes | `started \| in_progress \| passed \| failed \| blocked \| completed`. |
-| 7 | `summary` | string (≤ 200 chars), quoted | yes | Conventional Commits format on `action=commit`: `type(scope): description`. Free-form otherwise. `make git` uses this verbatim as the commit message. |
+| 7 | `summary` | string (≤ 200 chars), quoted | yes | Conventional Commits format **required** on `action=commit`: `type(scope)?(!)?: description`. The appender rejects (exit 65) a non-conforming commit summary. Free-form otherwise. `make git` uses this verbatim as the commit message. |
 | 8 | `refs` | semi-colon-separated string | no | File paths, issue links, prior `run_id`s. Example: `"src/auth.go;docs/design/AUTH.md;#42"`. |
 | 9 | `commit_sha` | empty \| `pending` \| 7–40 hex | depends | On `action=commit`: must be `pending` (until `make git` runs) or a hex SHA. On `action=revert`: must be a hex SHA (of the reverted commit). All other actions: must be empty. |
 
@@ -52,8 +52,11 @@
    - `action=commit` → `commit_sha` ∈ {`pending`} ∪ `[0-9a-f]{7,40}`.
    - `action=revert` → `commit_sha` matches `[0-9a-f]{7,40}`.
    - all other actions → `commit_sha` is empty.
-6. `summary` on `action=commit` must look like Conventional Commits
-   (`type(scope?): description`) — the appender warns but does not reject.
+6. `summary` on `action=commit` **must** be Conventional Commits format
+   (`type(scope)?(!)?: description`, types: `feat fix docs style refactor
+   perf test chore ci build revert`) — the appender **rejects** a
+   non-conforming summary with exit 65 (the row is not appended). `make git`
+   re-validates each subject and refuses to commit a non-conforming one.
 7. `run_id` matches `[a-z0-9-]{4,40}`.
 8. Atomic write under `flock(1)` so concurrent agent runs cannot interleave.
 

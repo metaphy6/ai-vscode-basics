@@ -101,10 +101,17 @@ case "$action" in
     if [[ "$commit_sha" != "pending" ]] && ! [[ "$commit_sha" =~ ^[0-9a-f]{7,40}$ ]]; then
       die "action=commit requires --commit-sha=pending or a hex SHA (got '$commit_sha')" 65
     fi
-    # Soft check for Conventional Commits format on commit rows.
+    # HARD check for Conventional Commits format on commit rows. The summary
+    # becomes the commit subject verbatim (make git), so a non-conforming
+    # summary is rejected here — the row is NOT appended. This is the single
+    # gate that keeps the commit log Conventional-Commits-clean "no matter what".
     cc_re='^(feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)(\([^)]+\))?!?:[[:space:]].+'
     if ! [[ "$summary" =~ $cc_re ]]; then
-      log_warn "summary does not look like Conventional Commits: '$summary'"
+      log_err "summary is not Conventional Commits format: '$summary'"
+      log_err "  required: <type>(<scope>)?(!)?: <description>"
+      log_err "  types:    feat fix docs style refactor perf test chore ci build revert"
+      log_err "  examples: 'feat(auth): add JWT validation'  'fix: correct null deref'  'refactor(api)!: drop v1 routes'"
+      die "action=commit summary must be Conventional Commits format" 65
     fi
     ;;
   revert)

@@ -168,6 +168,56 @@ test_summary_with_comma_is_quoted() {
   rm -rf "$tmp"
 }
 
+test_noncc_commit_summary_exits_65() {
+  local tmp; tmp="$(mktemp -d)"
+  local csv="$tmp/tracking.csv"
+  printf 'ts_utc,run_id,agent,scope,action,status,summary,refs,commit_sha\n' > "$csv"
+
+  local got=0
+  with_csv "$csv" \
+    --action=commit --status=completed \
+    --summary="added a thing without a type" --run-id=run-test-004 >/dev/null 2>&1 || got=$?
+
+  if [[ "$got" -eq 65 ]]; then
+    log_ok "  PASS: non-Conventional-Commits summary on commit row exits 65"
+    (( PASS++ )) || true
+  else
+    log_err "  FAIL: expected exit 65, got $got"
+    (( FAIL++ )) || true
+  fi
+
+  # And confirm the row was NOT appended (header only → 1 line).
+  local lines; lines="$(wc -l < "$csv")"
+  if [[ "$lines" -eq 1 ]]; then
+    log_ok "  PASS: rejected commit row was not appended"
+    (( PASS++ )) || true
+  else
+    log_err "  FAIL: expected 1 line (header only), got $lines"
+    (( FAIL++ )) || true
+  fi
+  rm -rf "$tmp"
+}
+
+test_cc_commit_with_bang_and_scope_appended() {
+  local tmp; tmp="$(mktemp -d)"
+  local csv="$tmp/tracking.csv"
+  printf 'ts_utc,run_id,agent,scope,action,status,summary,refs,commit_sha\n' > "$csv"
+
+  with_csv "$csv" \
+    --action=commit --status=completed \
+    --summary="refactor(api)!: drop v1 routes" --run-id=run-test-005 >/dev/null 2>&1
+
+  local lines; lines="$(wc -l < "$csv")"
+  if [[ "$lines" -eq 2 ]]; then
+    log_ok "  PASS: breaking-change Conventional-Commits summary appended"
+    (( PASS++ )) || true
+  else
+    log_err "  FAIL: expected 2 lines, got $lines"
+    (( FAIL++ )) || true
+  fi
+  rm -rf "$tmp"
+}
+
 # ── run all tests ─────────────────────────────────────────────────────────
 test_valid_note_row_appended
 test_valid_commit_row_defaults_to_pending
@@ -176,6 +226,8 @@ test_invalid_action_value_exits_65
 test_invalid_status_value_exits_65
 test_missing_csv_exits_66
 test_summary_with_comma_is_quoted
+test_noncc_commit_summary_exits_65
+test_cc_commit_with_bang_and_scope_appended
 
 printf '\n'
 log_step "tracking_append: %d passed, %d failed" "$PASS" "$FAIL"

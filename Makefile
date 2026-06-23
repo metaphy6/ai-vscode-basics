@@ -26,7 +26,7 @@ TAG ?=
 
 .DEFAULT_GOAL := help
 
-.PHONY: help git git.dry track.add track.list roadmap.status doctor scaffold skills.status skills.find test
+.PHONY: help git git.dry track.add track.list roadmap.status doctor scaffold skills.status skills.find test verify
 
 ## help              List all available targets
 help:
@@ -74,3 +74,8 @@ skills.find:
 ## test              Run the xops test suite
 test:
 	@bash xops/test/run_tests.sh
+
+## verify            Verifier gate: full test suite + make doctor (run cold)
+verify:
+	@$(MAKE) --no-print-directory test
+	@$(MAKE) --no-print-directory doctor
