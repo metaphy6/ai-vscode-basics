@@ -78,6 +78,36 @@ test_real_run_blank_tracking_csv() {
   rm -rf "$target"
 }
 
+# ── test: excluded vendor files are never scaffolded ─────────────────────
+test_real_run_excludes_unmanaged_vendor_files() {
+  local target; target="$(mktemp -d)"
+
+  bash "$SCAFFOLD" --target "$target" >/dev/null 2>&1
+
+  local rel
+  for rel in \
+    ".codex-plugin" \
+    ".cursor" \
+    ".opencode" \
+    ".claude-plugin" \
+    "gemini-extension.json" \
+    "GEMINI.md"; do
+    ok_if "real run never creates $rel" "$([[ ! -e "$target/$rel" ]] && echo true || echo false)"
+  done
+
+  for rel in \
+    ".codex-plugin" \
+    ".cursor" \
+    ".opencode" \
+    ".claude-plugin" \
+    "gemini-extension.json" \
+    "GEMINI.md"; do
+    ok_if "source repo has no $rel" "$([[ ! -e "$REPO_ROOT/$rel" ]] && echo true || echo false)"
+  done
+
+  rm -rf "$target"
+}
+
 # ── test: --force re-creates files ────────────────────────────────────────
 test_force_flag_overwrites() {
   local target; target="$(mktemp -d)"
@@ -118,6 +148,7 @@ test_dryrun_no_files_created
 test_dryrun_exits_zero
 test_real_run_creates_agents_md
 test_real_run_blank_tracking_csv
+test_real_run_excludes_unmanaged_vendor_files
 test_force_flag_overwrites
 test_no_skills_flag
 

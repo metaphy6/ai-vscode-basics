@@ -35,7 +35,7 @@ no file edits, no commits.
 - [ ] ...
 
 ## Gates
-- <gate 1: "make test passes">
+- <gate 1: "the test suite passes">
 - <gate 2: "no new lint warnings">
 
 ## Risks

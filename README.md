@@ -33,9 +33,8 @@ git clone https://github.com/metaphy6/ai-vscode-basics.git ~/code/ai-vscode-basi
 ```
 
 ```bash
-# 3. Verify + orient the first agent session
+# 3. Orient the first agent session
 cd ./my-repo
-make doctor
 xops/agent/session-bootstrap.sh
 ```
 
@@ -54,8 +53,8 @@ xops/init/scaffold.sh --target /path/to/your-project
 It gives every project the same shape:
 
 - 📜 **One rulebook (`AGENTS.md`)** that every AI assistant reads first, plus
-  thin per-vendor entry points (`CLAUDE.md`, `GEMINI.md`, `CONVENTIONS.md`,
-  `.github/copilot-instructions.md`, `.cursor/rules/`, `.codex-plugin/`, …)
+  thin per-vendor entry points (`CLAUDE.md`, `CONVENTIONS.md`, and
+  `.github/copilot-instructions.md`)
   that all delegate back to it. No drift between assistants.
 - 📊 **A 9-column [`docs/tracking/tracking.csv`](docs/tracking/tracking.csv)** that
   records every meaningful agent action (plan / implement / test / review /
@@ -100,7 +99,7 @@ Pick exactly which agent surfaces you want:
 
 ```bash
 ./xops/init/scaffold.sh --target /path/to/your-project \
-  --agents copilot,claude,gemini --no-cursor --no-aider
+  --agents copilot,claude --no-aider
 ```
 
 Add a language preset:
@@ -119,7 +118,6 @@ make help          # list every target
 make git.dry       # preview what would be committed (read-only)
 make git           # commit pending tracking rows + push
 make track.add ACTION=note SUMMARY="..."   # append a tracking row
-make doctor        # sanity-check the framework is wired correctly
 ```
 
 The agent in your project reads `AGENTS.md` first. That's it.
@@ -131,10 +129,10 @@ The agent in your project reads `AGENTS.md` first. That's it.
 | Path | Purpose |
 |---|---|
 | `AGENTS.md` | Master rulebook (model-agnostic). Every agent reads this first. |
-| `CLAUDE.md` / `GEMINI.md` / `CONVENTIONS.md` | Vendor entry points that delegate to `AGENTS.md`. |
+| `CLAUDE.md` / `CONVENTIONS.md` | Vendor entry points that delegate to `AGENTS.md`. |
 | `.github/copilot-instructions.md` | Copilot Chat / agent-mode rules. |
 | `.github/agents/` + `.github/prompts/` | Reusable custom agents and slash-command prompts. |
-| `.cursor/`, `.codex-plugin/`, `.opencode/`, `.claude-plugin/`, `.aider.conf.yml`, `gemini-extension.json` | Per-vendor wiring (mostly minimal — they all point at `AGENTS.md`). |
+| `.aider.conf.yml` | Optional Aider wiring. |
 | `.vscode/{settings,tasks,mcp}.json` | VS Code workspace defaults. |
 | `.mcp.json` | Repo-level MCP server config (CodeGraph wired; rest stubbed). |
 | `Makefile` | Thin dispatcher → `xops/makefile/*.py`. |
@@ -178,23 +176,17 @@ distilled from real-world AI-coding repos. Each skill is a subfolder with a
 `SKILL.md` file (a clear *when-to-use* trigger + guidance). They are accessible
 via the VS Code Copilot `/` command. See [`.agents/skills/README.md`](.agents/skills/README.md) for the index.
 
-```bash
-make skills.status          # table: skill name, line count, tags, AGENTS.md refs
-make skills.find TAG=debug  # search by tag or name keyword
-```
-
 ---
 
 ## 🛠️ Repo layout (the framework itself)
 
 ```
 ai-vscode-basics/
-├── AGENTS.md, CLAUDE.md, GEMINI.md, CONVENTIONS.md   # rulebooks
+├── AGENTS.md, CLAUDE.md, CONVENTIONS.md              # rulebooks
 ├── README.md, LICENSE, Makefile, .gitignore          # standard
 ├── install.sh                                        # one-liner curl installer (framework-only)
 ├── .ai-vscode-basics-version                         # current framework version (framework-only)
-├── .github/, .cursor/, .codex-plugin/, .opencode/    # per-agent wiring
-├── .claude-plugin/, .vscode/, .mcp.json, .aider.conf.yml, gemini-extension.json
+├── .github/, .vscode/, .mcp.json, .aider.conf.yml   # per-agent wiring
 ├── .agents/skills/          # curated skill library (one SKILL.md per subfolder)
 ├── docs/
 │   ├── tracking/            # tracking log + schema + state + context

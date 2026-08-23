@@ -3,7 +3,6 @@
 #
 # Usage:
 #   bash xops/test/run_tests.sh
-#   make test
 
 set -euo pipefail
 

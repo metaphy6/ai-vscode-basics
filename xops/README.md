@@ -24,8 +24,7 @@ xops/
     ├── git_ops.py
     ├── track_ops.py
     ├── roadmap_ops.py
-    ├── skills_ops.py
-    └── doctor.py
+    └── codegraph.py
 ```
 
 ## Conventions
@@ -52,7 +51,7 @@ xops/
 | [`makefile/git_ops.py`](makefile/git_ops.py) | `make git` / `make git.dry`. |
 | [`makefile/track_ops.py`](makefile/track_ops.py) | `make track.add` / `make track.list`. |
 | [`makefile/roadmap_ops.py`](makefile/roadmap_ops.py) | `make roadmap.status`. |
-| [`makefile/doctor.py`](makefile/doctor.py) | `make doctor` — verify the framework is wired correctly. |
+| [`makefile/codegraph.py`](makefile/codegraph.py) | `make codeg` — initialize or update the CodeGraph index. |
 
 ## Add a new Makefile target
 

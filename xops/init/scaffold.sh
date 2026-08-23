@@ -36,7 +36,6 @@
 #
 # After install, in the target repo:
 #   make help          # see available targets
-#   make doctor        # verify the install
 #   xops/agent/session-bootstrap.sh   # first context-load
 
 set -euo pipefail
@@ -242,7 +241,6 @@ else
 
 \`\`\`bash
 # install dependencies (edit for your stack)
-make doctor          # sanity-check the agent framework wiring
 \`\`\`
 
 ## Documentation
@@ -271,7 +269,6 @@ fi
 
 # Vendor entrypoint files — only for selected agents.
 want_agent claude  && copy_file "CLAUDE.md"
-want_agent gemini  && copy_file "GEMINI.md"
 want_agent aider   && copy_file "CONVENTIONS.md" && copy_file ".aider.conf.yml"
 
 # ── 2. .github/ ─────────────────────────────────────────────────────────
@@ -336,11 +333,6 @@ if [[ $WITH_MCP -eq 1 ]]; then
   fi
 fi
 
-want_agent cursor   && { log_step "✨ .cursor/"; copy_file ".cursor/rules/agents.mdc"; [[ $WITH_MCP -eq 1 ]] && copy_file ".cursor/mcp.json"; }
-want_agent claude   && { log_step "🤖 .claude-plugin/"; copy_file ".claude-plugin/plugin.json"; }
-want_agent codex    && { log_step "🧪 .codex-plugin/"; copy_file ".codex-plugin/config.toml"; }
-want_agent opencode && { log_step "🪩 .opencode/"; copy_file ".opencode/config.json"; }
-want_agent gemini   && { log_step "💎 gemini-extension"; copy_file "gemini-extension.json"; }
 
 # ── 5. docs/tracking/ ─────────────────────────────────────────────────────────────
 log_step "📋 docs/tracking/"
@@ -521,7 +513,6 @@ echo >&2
 log_info "Next steps:"
 log_dim  "  cd $TARGET"
 log_dim  "  make help"
-log_dim  "  make doctor"
 log_dim  "  xops/agent/session-bootstrap.sh"
 
 # ── 9. CodeGraph index ──────────────────────────────────────────────────

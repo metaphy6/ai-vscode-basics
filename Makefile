@@ -5,7 +5,7 @@
 #  xops/makefile/<module>.py (stdlib-only, cross-platform).
 #
 #  Convention:
-#    • daily verbs are short  : help, git, doctor, scaffold
+#    • daily verbs are short  : help, git
 #    • everything else uses   : domain.action  (track.add, git.dry, roadmap.status)
 # ┊┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
 
@@ -21,12 +21,9 @@ SUMMARY ?=
 REFS    ?=
 RUN_ID  ?=
 
-# Skills targets
-TAG ?=
-
 .DEFAULT_GOAL := help
 
-.PHONY: help git git.dry track.add track.list roadmap.status doctor scaffold skills.status skills.find test verify
+.PHONY: help git git.dry track.add track.list roadmap.status codeg
 
 ## help              List all available targets
 help:
@@ -55,27 +52,6 @@ track.list:
 roadmap.status:
 	@$(XOPS)/roadmap_ops.py status
 
-## doctor            Sanity-check the framework is wired correctly
-doctor:
-	@$(XOPS)/doctor.py
-
-## scaffold          Print bootstrapper usage (run xops/init/scaffold.sh --help for real)
-scaffold:
-	@xops/init/scaffold.sh --help
-
-## skills.status     List all skills with line count, last-modified, and AGENTS.md refs
-skills.status:
-	@$(XOPS)/skills_ops.py status
-
-## skills.find       Search skills by tag or name keyword (TAG=<tag>)
-skills.find:
-	@TAG="$(TAG)" $(XOPS)/skills_ops.py find
-
-## test              Run the xops test suite
-test:
-	@bash xops/test/run_tests.sh
-
-## verify            Verifier gate: full test suite + make doctor (run cold)
-verify:
-	@$(MAKE) --no-print-directory test
-	@$(MAKE) --no-print-directory doctor
+## codeg             Initialize or update the CodeGraph index
+codeg:
+	@$(XOPS)/codegraph.py update

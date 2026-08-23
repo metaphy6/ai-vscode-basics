@@ -41,7 +41,7 @@ first smoke test.
 
 **Scope id.** `phase-1`
 
-**Test plan.** `make doctor` exits 0; the repo's primary test runner runs
+**Test plan.** The repository's primary test runner runs
 zero tests but exits 0.
 
 ### Bullets
@@ -99,7 +99,7 @@ A phase is **done** when:
 
 1. Every `[ ]` bullet under its heading is `[x]`.
 2. The phase's *Test plan* line passes on a clean tree.
-3. `make doctor` exits 0.
+3. The repository verification checks pass.
 4. The status snapshot at the top of this file has been updated.
 5. The phase's run produced one or more `commit` tracking rows whose
    `[run-id]` trailers all appear in `git log`.

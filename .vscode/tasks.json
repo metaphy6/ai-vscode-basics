@@ -7,7 +7,7 @@
       "command": "xops/agent/session-bootstrap.sh",
       "presentation": { "reveal": "always", "panel": "dedicated" },
       "problemMatcher": []
-    },
+    }
     {
       "label": "Agent: Track (append row)",
       "type": "shell",
@@ -32,14 +32,6 @@
       "presentation": { "reveal": "always" },
       "problemMatcher": []
     },
-    {
-      "label": "Doctor: Verify framework",
-      "type": "shell",
-      "command": "make",
-      "args": ["doctor"],
-      "presentation": { "reveal": "always" },
-      "problemMatcher": []
-    }
   ],
   "inputs": [
     {

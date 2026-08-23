@@ -15,8 +15,8 @@ description: "Release Checklist. You are about to tag a version, publish a packa
 
 ### Pre-release (gate check)
 
-- [ ] All tests pass on CI (`make test` or equivalent).
-- [ ] `make doctor` passes cleanly.
+- [ ] All tests pass on CI or the project's equivalent test runner.
+- [ ] The project's verification checks pass cleanly.
 - [ ] All `tracking.csv` rows with `commit_sha=pending` have been committed
       (`make git`).
 - [ ] `CHANGELOG.md` (or equivalent) updated with user-visible changes.
