@@ -14,7 +14,7 @@
 #   --force               Overwrite files that already exist at the target.
 #   --preset NAME         minimal | full   (default: full)
 #   --agents LIST         Comma-separated list of agents to wire (default: all).
-#                         Choices: copilot,claude,aider,local
+#                         Choices: copilot,claude,local
 #   --lang LANG           Language preset: python | node | go | rust
 #                         Adds .gitignore lines, Makefile.lang.mk, and starter test command.
 #   --no-mcp              Skip MCP config files.
@@ -50,7 +50,7 @@ TARGET=""
 DRY_RUN=0
 FORCE=0
 PRESET="full"
-AGENTS="copilot,claude,aider,local"
+AGENTS="copilot,claude,local"
 WITH_MCP=1
 WITH_VSCODE=1
 WITH_SKILLS=1
@@ -269,7 +269,8 @@ fi
 
 # Vendor entrypoint files — only for selected agents.
 want_agent claude  && copy_file "CLAUDE.md"
-want_agent aider   && copy_file "CONVENTIONS.md" && copy_file ".aider.conf.yml"
+# CONVENTIONS.md is a generic vendor entry point, not tied to a specific agent.
+copy_file "CONVENTIONS.md"
 
 # ── 2. .github/ ─────────────────────────────────────────────────────────
 if want_agent copilot; then

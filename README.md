@@ -2,14 +2,6 @@
 
 > **A model-agnostic scaffold for repositories where AI coding agents do real work.**
 > Drop-in instructions, configs, skills, tracking, and a tiny Makefile + xops layer
-> that work the same across **GitHub Copilot, Claude, Gemini, Codex CLI, Cursor,
-> OpenCode, Aider, and local models** (Ollama / LM Studio).
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![ShellCheck](https://img.shields.io/badge/shellcheck-passing-brightgreen)](https://www.shellcheck.net/)
-[![shfmt](https://img.shields.io/badge/shfmt-formatted-blue)](https://github.com/mvdan/sh)
-[![Scaffolded with](https://img.shields.io/badge/scaffolded--with-v1.0.0-blueviolet)](.ai-vscode-basics-version)
-[![Works with 8 agents](https://img.shields.io/badge/works%20with-8%20agents-orange)](docs/guides/MODEL_PROFILES.md)
 
 > **Note:** this README describes the framework repo itself. When you scaffold
 > into a target project, the target gets a small project-template `README.md`
@@ -99,7 +91,7 @@ Pick exactly which agent surfaces you want:
 
 ```bash
 ./xops/init/scaffold.sh --target /path/to/your-project \
-  --agents copilot,claude --no-aider
+  --agents copilot,claude
 ```
 
 Add a language preset:
@@ -132,7 +124,6 @@ The agent in your project reads `AGENTS.md` first. That's it.
 | `CLAUDE.md` / `CONVENTIONS.md` | Vendor entry points that delegate to `AGENTS.md`. |
 | `.github/copilot-instructions.md` | Copilot Chat / agent-mode rules. |
 | `.github/agents/` + `.github/prompts/` | Reusable custom agents and slash-command prompts. |
-| `.aider.conf.yml` | Optional Aider wiring. |
 | `.vscode/{settings,tasks,mcp}.json` | VS Code workspace defaults. |
 | `.mcp.json` | Repo-level MCP server config (CodeGraph wired; rest stubbed). |
 | `Makefile` | Thin dispatcher → `xops/makefile/*.py`. |
@@ -186,7 +177,7 @@ ai-vscode-basics/
 ├── README.md, LICENSE, Makefile, .gitignore          # standard
 ├── install.sh                                        # one-liner curl installer (framework-only)
 ├── .ai-vscode-basics-version                         # current framework version (framework-only)
-├── .github/, .vscode/, .mcp.json, .aider.conf.yml   # per-agent wiring
+├── .github/, .vscode/, .mcp.json                    # per-agent wiring
 ├── .agents/skills/          # curated skill library (one SKILL.md per subfolder)
 ├── docs/
 │   ├── tracking/            # tracking log + schema + state + context
