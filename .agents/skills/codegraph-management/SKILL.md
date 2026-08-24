@@ -14,14 +14,13 @@ a session if `.codegraph/` exists, and **always** after a large refactor.
 
 ## Access — how the index gets wired
 
-CodeGraph runs as a stdio MCP server. The repo wires it in three places so
+CodeGraph runs as a stdio MCP server. The repo wires it in two places so
 every assistant sees it:
 
 | File | Client | Path strategy |
 |---|---|---|
-| [`.mcp.json`](../../.mcp.json) | Claude Code, generic MCP clients | Absolute path baked in by `scaffold.sh` |
-| [`.vscode/mcp.json`](../../.vscode/mcp.json) | VS Code Copilot | `${workspaceFolder}` (expanded at runtime) |
-| [`.cursor/mcp.json`](../../.cursor/mcp.json) | Cursor | `${workspaceFolder}` |
+| [`.mcp.json`](../../.mcp.json) | Claude Code, Cursor, generic MCP clients | Absolute path baked in by `scaffold.sh` when scaffolding a new project (this repo's own copy ships path-less) |
+| [`.vscode/mcp.json`](../../.vscode/mcp.json) | VS Code Copilot | No `codegraph` entry — relies on a global/user-level registration instead |
 
 The on-disk index lives under [`.codegraph/`](../../.codegraph/) (gitignored
 except for `.gitignore` itself). If the directory doesn't exist, the server

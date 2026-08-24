@@ -7,7 +7,7 @@
       "command": "xops/agent/session-bootstrap.sh",
       "presentation": { "reveal": "always", "panel": "dedicated" },
       "problemMatcher": []
-    }
+    },
     {
       "label": "Agent: Track (append row)",
       "type": "shell",
