@@ -121,6 +121,18 @@ test_double_source_is_safe() {
   ok_if "double-source is safe (exit $got)" "$([[ "$got" -eq 0 ]] && echo true || echo false)"
 }
 
+# ── test: no caller treats log_* as a printf format string ────────────────
+# _emit prints with `printf '%s\n' "$*"`, so format specifiers are never
+# interpreted and trailing args are appended verbatim. Callers must interpolate.
+test_no_caller_passes_printf_format_args() {
+  local offenders=""
+  offenders="$(grep -rnE '\blog_(info|ok|warn|err|step|dim) +"[^"]*%[a-z][^"]*" +"' \
+    --include='*.sh' "$REPO_ROOT/xops" 2>/dev/null || true)"
+  ok_if "no log_* caller passes printf-style format args" \
+    "$([[ -z "$offenders" ]] && echo true || echo false)"
+  [[ -z "$offenders" ]] || printf '     offenders:\n%s\n' "$offenders" >&2
+}
+
 # ── run all ───────────────────────────────────────────────────────────────
 test_log_ok_produces_output
 test_log_err_produces_output
@@ -133,6 +145,7 @@ test_no_color_removes_ansi
 test_die_exits_nonzero
 test_die_defaults_exit_1
 test_double_source_is_safe
+test_no_caller_passes_printf_format_args
 
 printf '\n'
 printf '▶️  log: %d passed, %d failed\n' "$PASS" "$FAIL" >&2

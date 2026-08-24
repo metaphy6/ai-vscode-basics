@@ -13,7 +13,7 @@
 #   --dry-run             Preview only; change nothing.
 #   --force               Overwrite existing files.
 #   --preset NAME         minimal | full  (default: full)
-#   --agents LIST         Comma-separated: copilot,claude,gemini,codex,cursor,opencode,aider,local
+#   --agents LIST         Comma-separated: copilot,claude,aider,local
 #   --lang LANG           Add language preset: python | node | go | rust
 #   --no-mcp              Skip MCP config files.
 #   --no-vscode           Skip .vscode/ folder.

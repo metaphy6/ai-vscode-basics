@@ -39,7 +39,7 @@ done
 
 # ── summary ──────────────────────────────────────────────────────────────
 printf '\n'
-log_step "Results: %d passed, %d failed" "$PASS" "$FAIL"
+log_step "Results: $PASS passed, $FAIL failed"
 if [[ ${#ERRORS[@]} -gt 0 ]]; then
   for e in "${ERRORS[@]}"; do
     log_err "  failed: $e"

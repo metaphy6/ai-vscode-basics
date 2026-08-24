@@ -14,7 +14,7 @@
 #   --force               Overwrite files that already exist at the target.
 #   --preset NAME         minimal | full   (default: full)
 #   --agents LIST         Comma-separated list of agents to wire (default: all).
-#                         Choices: copilot,claude,gemini,codex,cursor,opencode,aider,local
+#                         Choices: copilot,claude,aider,local
 #   --lang LANG           Language preset: python | node | go | rust
 #                         Adds .gitignore lines, Makefile.lang.mk, and starter test command.
 #   --no-mcp              Skip MCP config files.
@@ -23,7 +23,7 @@
 #   -h | --help           This message.
 #
 # What gets installed (full preset):
-#   - Root: LICENSE, AGENTS.md, CLAUDE.md, GEMINI.md, CONVENTIONS.md,
+#   - Root: LICENSE, AGENTS.md, CLAUDE.md, CONVENTIONS.md,
 #           Makefile, .gitignore, .gitattributes
 #           (README.md is NOT copied — a project-template README is written instead)
 #   - .github/        copilot-instructions.md + agents/ + prompts/
@@ -50,7 +50,7 @@ TARGET=""
 DRY_RUN=0
 FORCE=0
 PRESET="full"
-AGENTS="copilot,claude,gemini,codex,cursor,opencode,aider,local"
+AGENTS="copilot,claude,aider,local"
 WITH_MCP=1
 WITH_VSCODE=1
 WITH_SKILLS=1

@@ -230,5 +230,5 @@ test_noncc_commit_summary_exits_65
 test_cc_commit_with_bang_and_scope_appended
 
 printf '\n'
-log_step "tracking_append: %d passed, %d failed" "$PASS" "$FAIL"
+log_step "tracking_append: $PASS passed, $FAIL failed"
 [[ "$FAIL" -eq 0 ]]

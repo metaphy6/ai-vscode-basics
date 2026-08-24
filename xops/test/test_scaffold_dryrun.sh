@@ -153,5 +153,5 @@ test_force_flag_overwrites
 test_no_skills_flag
 
 printf '\n'
-log_step "scaffold_dryrun: %d passed, %d failed" "$PASS" "$FAIL"
+log_step "scaffold_dryrun: $PASS passed, $FAIL failed"
 [[ "$FAIL" -eq 0 ]]

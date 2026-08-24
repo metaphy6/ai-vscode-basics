@@ -65,5 +65,5 @@ test_codeg_warns_without_runner
 test_codeg_reports_runner_error
 
 printf '\n'
-log_step "codegraph: %d passed, %d failed" "$PASS" "$FAIL"
+log_step "codegraph: $PASS passed, $FAIL failed"
 [[ "$FAIL" -eq 0 ]]

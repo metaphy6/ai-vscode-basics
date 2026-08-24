@@ -47,5 +47,5 @@ assert_cc "feat:" 1
 assert_cc "" 1
 
 printf '\n'
-log_step "git_ops conventional-commits: %d passed, %d failed" "$PASS" "$FAIL"
+log_step "git_ops conventional-commits: $PASS passed, $FAIL failed"
 [[ "$FAIL" -eq 0 ]]
